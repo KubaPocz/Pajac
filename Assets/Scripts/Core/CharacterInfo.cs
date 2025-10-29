@@ -49,7 +49,7 @@ public class CharacterStats
         else
         {
             CurrentStamina = 0f;
-            Sleep();
+            RestoreStamina();
         }
     }
     public void IncreaseHealth()
@@ -64,20 +64,29 @@ public class CharacterStats
     }
     public void IncreaseAgility()
     {
-        Agility++;
-        LevelPoints--;
+        if (LevelPoints > 0)
+        {
+            Agility++;
+            LevelPoints--;
+        }
     }
     public void IncreaseStrenght()
     {
-        Strenght++;
-        LevelPoints--;
+        if (LevelPoints > 0)
+        {
+            Strenght++;
+            LevelPoints--;
+        }
     }
     public void IncreasePrecision()
     {
-        Precision++;
-        LevelPoints--;
+        if (LevelPoints > 0)
+        {
+            Precision++;
+            LevelPoints--;
+        }
     }
-    public void Sleep()
+    public void RestoreStamina()
     {
         if (CurrentStamina + 40f <= MaxStamina)
             CurrentStamina += 40f;
