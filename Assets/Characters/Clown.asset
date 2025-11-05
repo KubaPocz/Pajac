@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
   CharacterName: Clown
   CurrentHealth: 0
-  MaxHealth: 0
+  MaxHealth: 150
   CurrentStamina: 0
-  MaxStamina: 0
-  Agility: 0
-  Strenght: 0
-  Precision: 0
+  MaxStamina: 120
+  Agility: 12
+  Strenght: 15
+  Precision: 12
   LevelPoints: 0

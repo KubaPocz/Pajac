@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
   CharacterName: Monkey
   CurrentHealth: 0
-  MaxHealth: 0
+  MaxHealth: 80
   CurrentStamina: 0
-  MaxStamina: 0
-  Agility: 0
-  Strenght: 0
-  Precision: 0
+  MaxStamina: 80
+  Agility: 8
+  Strenght: 8
+  Precision: 8
   LevelPoints: 0

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
   CharacterName: Elephant
   CurrentHealth: 0
-  MaxHealth: 0
+  MaxHealth: 120
   CurrentStamina: 0
-  MaxStamina: 0
-  Agility: 0
-  Strenght: 0
-  Precision: 0
+  MaxStamina: 100
+  Agility: 10
+  Strenght: 12
+  Precision: 10
   LevelPoints: 0

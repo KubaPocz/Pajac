@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
   CharacterName: Boss
   CurrentHealth: 0
-  MaxHealth: 0
+  MaxHealth: 200
   CurrentStamina: 0
-  MaxStamina: 0
-  Agility: 0
-  Strenght: 0
-  Precision: 0
+  MaxStamina: 150
+  Agility: 15
+  Strenght: 20
+  Precision: 15
   LevelPoints: 0
