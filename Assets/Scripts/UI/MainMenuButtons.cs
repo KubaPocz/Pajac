@@ -5,7 +5,7 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void NewGame()
     {
-        SceneManager.LoadScene("StartingCutscene");
+        SceneManager.LoadSceneAsync("LoadingScene");
     }
     public void ContinueGame()
     {
