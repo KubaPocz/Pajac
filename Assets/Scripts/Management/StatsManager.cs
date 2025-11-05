@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class StatsManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static StatsManager Instance;
+    public CharacterInfo player;
+    private void Awake()
     {
-        
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    private void Start()
+    {
+        player = GameManager.Instance.Player;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
