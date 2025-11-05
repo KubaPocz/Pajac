@@ -1,22 +1,19 @@
-public class CharacterStats
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "New Character", menuName = "RPG System/Character Stats")]
+public class CharacterStats : ScriptableObject
 {
     public string CharacterName;
-    public float CurrentHealth;
+    [HideInInspector] public float CurrentHealth;
     public float MaxHealth;
-    public float CurrentStamina;
+    [HideInInspector] public float CurrentStamina;
     public float MaxStamina;
     public int Agility;
     public int Strenght;
     public int Precision;
     public int LevelPoints;
 
-    public CharacterStats(  string characterName, 
-                            int levelPoints, 
-                            float maxHealth, 
-                            float maxStamina, 
-                            int agility, 
-                            int strenght, 
-                            int precision)
+    public void Initialize(string characterName, int levelPoints, float maxHealth, float maxStamina, int agility, int strenght, int precision)
     {
         CharacterName = characterName;
         LevelPoints = levelPoints;
@@ -31,7 +28,7 @@ public class CharacterStats
         Strenght = strenght;
         Precision = precision;
     }
-    
+
     public void GetDamage(float ammount)
     {
         if(CurrentHealth - ammount>0f)
