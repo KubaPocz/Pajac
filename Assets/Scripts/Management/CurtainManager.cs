@@ -5,62 +5,143 @@ using System.Collections;
 
 public class CurtainManager : MonoBehaviour
 {
+    public static CurtainManager Instance;
     [Header("Curtain Settings")]
     public Animator CurtainAnimator;
     public VideoPlayer CurtainVideoPlayer;
     public VideoClip OpeningCurtainClip;
     public VideoClip ClosingCurtainClip;
 
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+        }
+        Instance = this;
+    }
+
     private void Start()
     {
-        LoadSceneSequenceAfterAnimation("Statistics");
+        CurtainVideoPlayer.clip = null;
     }
-    public void LoadSceneSequence(string sceneName)
+    public void ShowCurtainAndChangeScene(string sceneToLoad, string sceneToUnload)
     {
-        StartCoroutine(LoadSceneSequenceRoutine(sceneName, false));
-    }
-
-    public void LoadSceneSequenceAfterAnimation(string sceneName)
-    {
-        StartCoroutine(LoadSceneSequenceRoutine(sceneName, true));
+        StartCoroutine(ShowCurtainAndChangeSceneRoutine(sceneToLoad, sceneToUnload));
     }
 
-    private IEnumerator LoadSceneSequenceRoutine(string sceneName, bool waitForAnimation)
+    private IEnumerator ShowCurtainAndChangeSceneRoutine(string sceneToLoad, string sceneToUnload)
     {
-        if (waitForAnimation)
+        yield return StartCoroutine(ShowCurtainRoutine());
+
+        ChangeSceneWithCurtain(sceneToLoad, sceneToUnload);
+    }
+    public void ChangeSceneWithCurtain(string sceneToLoad, string sceneToUnload)
+    {
+        CurtainVideoPlayer.clip = ClosingCurtainClip;
+        StartCoroutine(ChangeSceneWithCurtainRoutine(sceneToLoad, sceneToUnload));
+    }
+
+    private IEnumerator ChangeSceneWithCurtainRoutine(string sceneToLoad, string sceneToUnload)
+    {
+        yield return StartCoroutine(CloseCurtainRoutine());
+
+        if (!string.IsNullOrEmpty(sceneToUnload))
         {
-            yield return StartCoroutine(WaitForCurtainAnimation());
+            SceneManager.UnloadSceneAsync(sceneToUnload);
         }
 
-        CurtainVideoPlayer.clip = ClosingCurtainClip;
-        CurtainVideoPlayer.Play();
-        while (CurtainVideoPlayer.isPlaying)
-            yield return null;
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName,LoadSceneMode.Additive);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
         asyncLoad.allowSceneActivation = false;
 
-        // Czekamy a¿ scena siê za³aduje do 90–100%
-        while (asyncLoad.progress < 0.9f)
-            yield return null;
+        while (!asyncLoad.isDone)
+        {
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
 
-        CurtainVideoPlayer.clip = OpeningCurtainClip;
-        CurtainVideoPlayer.Play();
-        while (CurtainVideoPlayer.isPlaying)
             yield return null;
-        asyncLoad.allowSceneActivation = true;
+        }
 
+        yield return StartCoroutine(OpenCurtainRoutine());
     }
 
-    private IEnumerator WaitForCurtainAnimation()
+    public void ShowCurtain()
+    {
+        StartCoroutine(ShowCurtainRoutine());
+    }
+
+    public void CloseCurtain()
+    {
+        StartCoroutine(CloseCurtainRoutine());
+    }
+
+    public void OpenCurtain()
+    {
+        StartCoroutine(OpenCurtainRoutine());
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        StartCoroutine(LoadSceneRoutine(sceneName));
+    }
+
+    public void UnloadScene(string sceneName)
+    {
+        StartCoroutine(UnloadSceneRoutine(sceneName));
+    }
+
+    private IEnumerator ShowCurtainRoutine()
     {
         CurtainAnimator.SetTrigger("ShowCurtain");
         AnimatorStateInfo state = CurtainAnimator.GetCurrentAnimatorStateInfo(0);
-
         while (state.normalizedTime < 1f)
         {
             yield return null;
             state = CurtainAnimator.GetCurrentAnimatorStateInfo(0);
         }
     }
+
+    private IEnumerator CloseCurtainRoutine()
+    {
+        CurtainVideoPlayer.clip = ClosingCurtainClip;
+        CurtainVideoPlayer.Play();
+        while (CurtainVideoPlayer.isPlaying)
+            yield return null;
+    }
+
+    private IEnumerator OpenCurtainRoutine()
+    {
+        CurtainVideoPlayer.clip = OpeningCurtainClip;
+        CurtainVideoPlayer.Play();
+        while (CurtainVideoPlayer.isPlaying)
+            yield return null;
+    }
+
+    private IEnumerator LoadSceneRoutine(string sceneName)
+    {
+        yield return StartCoroutine(CloseCurtainRoutine());
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+            yield return null;
+
+        asyncLoad.allowSceneActivation = true;
+
+        yield return StartCoroutine(OpenCurtainRoutine());
+
+    }
+
+    private IEnumerator UnloadSceneRoutine(string sceneName)
+    {
+        yield return StartCoroutine(CloseCurtainRoutine());
+
+        SceneManager.UnloadSceneAsync(sceneName);
+
+        yield return StartCoroutine(OpenCurtainRoutine());
+    }
 }
+
