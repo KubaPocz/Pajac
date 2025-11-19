@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour, CharacterController
 
     private void Start()
     {
-        //Player.Initialize("Player", 10, 100, 100, 10, 10, 10);
+        Player.Initialize("Player", 10, 100, 100, 10, 10, 10);
     }
 
     public void MoveRight()
@@ -34,7 +34,12 @@ public class PlayerController : MonoBehaviour, CharacterController
     public void Block()
     {
         // For this example, let's assume the player blocks and reduces the damage by 50%
-        Debug.Log("Player blocks the attack - damage reduced by 50%");
+        double blockValue = 0.5 + (Player.Agility * 0.5);
+        if (blockValue > 0.8) 
+        {
+            blockValue = 0.8;
+        }
+        Debug.Log($"Player blocks the attack - damage reduced by {blockValue}");
     }
 
     public void AttackLight()
