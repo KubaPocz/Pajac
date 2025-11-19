@@ -1,16 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Video;
+using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class CurtainManager : MonoBehaviour
 {
     public static CurtainManager Instance;
+
     [Header("Curtain Settings")]
     public Animator CurtainAnimator;
-    public VideoPlayer CurtainVideoPlayer;
-    public VideoClip OpeningCurtainClip;
-    public VideoClip ClosingCurtainClip;
+    public RawImage curtainImageDisplay;  // U¿ywamy RawImage do wyœwietlania obrazów
+    public string openImageFolder = "Image/opening"; // Folder w Resources do obrazów otwierania
+    public string closeImageFolder = "Image/closing"; // Folder w Resources do obrazów zamykania
+    public float frameRate = 24f; // Liczba klatek na sekundê
+    private Texture[] openingCurtainFrames;  // Tablica z obrazami do otwierania
+    private Texture[] closingCurtainFrames;  // Tablica z obrazami do zamykania
+    private int currentFrame = 0;
+    private float timePerFrame;
 
     private void Awake()
     {
@@ -23,8 +30,13 @@ public class CurtainManager : MonoBehaviour
 
     private void Start()
     {
-        CurtainVideoPlayer.clip = null;
+        // Za³aduj obrazy z obu folderów
+        openingCurtainFrames = Resources.LoadAll<Texture>(openImageFolder);
+        closingCurtainFrames = Resources.LoadAll<Texture>(closeImageFolder);
+        timePerFrame = 1f / frameRate;  // Czas trwania jednej klatki
+        curtainImageDisplay.texture = closingCurtainFrames[0];
     }
+
     public void ShowCurtainAndChangeScene(string sceneToLoad, string sceneToUnload)
     {
         StartCoroutine(ShowCurtainAndChangeSceneRoutine(sceneToLoad, sceneToUnload));
@@ -32,20 +44,22 @@ public class CurtainManager : MonoBehaviour
 
     private IEnumerator ShowCurtainAndChangeSceneRoutine(string sceneToLoad, string sceneToUnload)
     {
+        // 1. Pokazanie zas³ony (animacja)
         yield return StartCoroutine(ShowCurtainRoutine());
-
-        ChangeSceneWithCurtain(sceneToLoad, sceneToUnload);
-    }
-    public void ChangeSceneWithCurtain(string sceneToLoad, string sceneToUnload)
-    {
-        CurtainVideoPlayer.clip = ClosingCurtainClip;
-        StartCoroutine(ChangeSceneWithCurtainRoutine(sceneToLoad, sceneToUnload));
+        yield return new WaitForSeconds(0.5f);
+        // 2. Odtwarzanie sekwencji obrazów (zamykanie zas³ony)
+        yield return StartCoroutine(PlayCurtainClosingSequence());
+        yield return new WaitForSeconds(0.5f);
+        // 3. Zmiana sceny po zakoñczeniu sekwencji zamykania
+        yield return StartCoroutine(ChangeSceneWithCurtainRoutine(sceneToLoad, sceneToUnload));
+        yield return new WaitForSeconds(0.5f);
+        // 4. Otwieranie zas³ony po za³adowaniu nowej sceny
+        yield return StartCoroutine(OpenCurtainRoutine());
     }
 
     private IEnumerator ChangeSceneWithCurtainRoutine(string sceneToLoad, string sceneToUnload)
     {
-        yield return StartCoroutine(CloseCurtainRoutine());
-
+        // 3. Zmiana sceny po zakoñczeniu zamkniêcia zas³ony
         if (!string.IsNullOrEmpty(sceneToUnload))
         {
             SceneManager.UnloadSceneAsync(sceneToUnload);
@@ -63,37 +77,11 @@ public class CurtainManager : MonoBehaviour
 
             yield return null;
         }
-
-        yield return StartCoroutine(OpenCurtainRoutine());
-    }
-
-    public void ShowCurtain()
-    {
-        StartCoroutine(ShowCurtainRoutine());
-    }
-
-    public void CloseCurtain()
-    {
-        StartCoroutine(CloseCurtainRoutine());
-    }
-
-    public void OpenCurtain()
-    {
-        StartCoroutine(OpenCurtainRoutine());
-    }
-
-    public void LoadScene(string sceneName)
-    {
-        StartCoroutine(LoadSceneRoutine(sceneName));
-    }
-
-    public void UnloadScene(string sceneName)
-    {
-        StartCoroutine(UnloadSceneRoutine(sceneName));
     }
 
     private IEnumerator ShowCurtainRoutine()
     {
+        // 1. Pokazanie zas³ony (animacja)
         CurtainAnimator.SetTrigger("ShowCurtain");
         AnimatorStateInfo state = CurtainAnimator.GetCurrentAnimatorStateInfo(0);
         while (state.normalizedTime < 1f)
@@ -103,45 +91,25 @@ public class CurtainManager : MonoBehaviour
         }
     }
 
-    private IEnumerator CloseCurtainRoutine()
+    private IEnumerator PlayCurtainClosingSequence()
     {
-        CurtainVideoPlayer.clip = ClosingCurtainClip;
-        CurtainVideoPlayer.Play();
-        while (CurtainVideoPlayer.isPlaying)
-            yield return null;
+        // 2. Odtwarzanie sekwencji obrazów (zamykanie zas³ony)
+        for (int i = 0; i < closingCurtainFrames.Length; i++)
+        {
+            curtainImageDisplay.texture = closingCurtainFrames[i];
+            yield return new WaitForSeconds(timePerFrame);  // Czas na ka¿d¹ klatkê
+            Debug.Log(i);
+        }
     }
 
     private IEnumerator OpenCurtainRoutine()
     {
-        CurtainVideoPlayer.clip = OpeningCurtainClip;
-        CurtainVideoPlayer.Play();
-        while (CurtainVideoPlayer.isPlaying)
-            yield return null;
+        // 4. Otwieranie zas³ony po za³adowaniu nowej sceny
+        for (int i = 0; i < openingCurtainFrames.Length; i++)
+        {
+            curtainImageDisplay.texture = openingCurtainFrames[i];
+            yield return new WaitForSeconds(timePerFrame);  // Czas na ka¿d¹ klatkê
+        }
     }
 
-    private IEnumerator LoadSceneRoutine(string sceneName)
-    {
-        yield return StartCoroutine(CloseCurtainRoutine());
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        asyncLoad.allowSceneActivation = false;
-
-        while (asyncLoad.progress < 0.9f)
-            yield return null;
-
-        asyncLoad.allowSceneActivation = true;
-
-        yield return StartCoroutine(OpenCurtainRoutine());
-
-    }
-
-    private IEnumerator UnloadSceneRoutine(string sceneName)
-    {
-        yield return StartCoroutine(CloseCurtainRoutine());
-
-        SceneManager.UnloadSceneAsync(sceneName);
-
-        yield return StartCoroutine(OpenCurtainRoutine());
-    }
 }
-
