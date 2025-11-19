@@ -17,5 +17,4 @@ public class StatsManager : MonoBehaviour
     {
         player = GameManager.Instance.Player;
     }
-
 }
