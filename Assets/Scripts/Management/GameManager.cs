@@ -21,5 +21,9 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    private void Start()
+    {
+        Player.Initialize("Player", 10, 100, 100, 10, 10, 10);
+    }
 
 }

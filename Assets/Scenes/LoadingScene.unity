@@ -324,7 +324,7 @@ MonoBehaviour:
   curtainImageDisplay: {fileID: 707138809}
   openImageFolder: Images/opening
   closeImageFolder: Images/closing
-  frameRate: 24
+  frameRate: 32
 --- !u!4 &1204374309
 Transform:
   m_ObjectHideFlags: 0

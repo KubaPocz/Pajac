@@ -13,7 +13,7 @@ public class CurtainManager : MonoBehaviour
     public RawImage curtainImageDisplay;  // U¿ywamy RawImage do wyœwietlania obrazów
     public string openImageFolder = "Image/opening"; // Folder w Resources do obrazów otwierania
     public string closeImageFolder = "Image/closing"; // Folder w Resources do obrazów zamykania
-    public float frameRate = 24f; // Liczba klatek na sekundê
+    public float frameRate = 32f; // Liczba klatek na sekundê
     private Texture[] openingCurtainFrames;  // Tablica z obrazami do otwierania
     private Texture[] closingCurtainFrames;  // Tablica z obrazami do zamykania
     private int currentFrame = 0;
@@ -37,22 +37,20 @@ public class CurtainManager : MonoBehaviour
         curtainImageDisplay.texture = closingCurtainFrames[0];
     }
 
-    public void ShowCurtainAndChangeScene(string sceneToLoad, string sceneToUnload)
+    public void ChangeScene(string sceneToLoad, string sceneToUnload,bool showCurtain)
     {
-        StartCoroutine(ShowCurtainAndChangeSceneRoutine(sceneToLoad, sceneToUnload));
+        StartCoroutine(ShowCurtainAndChangeSceneRoutine(sceneToLoad, sceneToUnload, showCurtain));
     }
 
-    private IEnumerator ShowCurtainAndChangeSceneRoutine(string sceneToLoad, string sceneToUnload)
+    private IEnumerator ShowCurtainAndChangeSceneRoutine(string sceneToLoad, string sceneToUnload, bool showCurtain)
     {
         // 1. Pokazanie zas³ony (animacja)
-        yield return StartCoroutine(ShowCurtainRoutine());
+        if(showCurtain) yield return StartCoroutine(ShowCurtainRoutine());
         yield return new WaitForSeconds(0.5f);
         // 2. Odtwarzanie sekwencji obrazów (zamykanie zas³ony)
         yield return StartCoroutine(PlayCurtainClosingSequence());
-        yield return new WaitForSeconds(0.5f);
         // 3. Zmiana sceny po zakoñczeniu sekwencji zamykania
         yield return StartCoroutine(ChangeSceneWithCurtainRoutine(sceneToLoad, sceneToUnload));
-        yield return new WaitForSeconds(0.5f);
         // 4. Otwieranie zas³ony po za³adowaniu nowej sceny
         yield return StartCoroutine(OpenCurtainRoutine());
     }

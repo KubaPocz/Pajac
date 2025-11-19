@@ -8,5 +8,4 @@ public interface CharacterController
     public  void AttackMedium();
     public  void AttackStrong();
     public  void Dodge();
-
 }

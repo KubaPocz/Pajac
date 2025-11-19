@@ -8,7 +8,7 @@ public class StatsManager : MonoBehaviour
     private int[] StatisticsToPass = new int[5];
     // Array containing statistics to pass towards CharacterInfo Methods
     // Following this format: 0-Health 1-Stamina 2-Agility 3-Strenght 4-Precision
-    public CharacterStats PlayerStats;
+    public CharacterStats Player;
     private int StatPoints = 10;
     private void Awake()
     {
@@ -21,12 +21,8 @@ public class StatsManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayerStats = GameManager.Instance.Player;
-        StatPoints = PlayerStats.LevelPoints;
-    }
-    private void OnEnable()
-    {
-        ResetPoints();
+        Player = GameManager.Instance.Player;
+        StatPoints = Player.LevelPoints;
     }
 
     public void AddHealthStatistic()
@@ -74,16 +70,17 @@ public class StatsManager : MonoBehaviour
 
     public void ResetPoints()
     {
-        StatPoints = PlayerStats.LevelPoints;
+        StatPoints = Player.LevelPoints;
         Array.Clear(StatisticsToPass, 0, StatisticsToPass.Length);
     }
 
     public void ConfirmStatistics()
     {
-        for (int i = 0; i < StatisticsToPass[0]; i++) { PlayerStats.IncreaseHealth();}
-        for (int i = 0; i < StatisticsToPass[1]; i++) PlayerStats.IncreaseStamina();
-        for (int i = 0; i < StatisticsToPass[2]; i++) PlayerStats.IncreaseAgility();
-        for (int i = 0; i < StatisticsToPass[3]; i++) PlayerStats.IncreaseStrenght();
-        for (int i = 0; i < StatisticsToPass[4]; i++) PlayerStats.IncreasePrecision();
+        for (int i = 0; i < StatisticsToPass[0]; i++) { Player.IncreaseHealth();}
+        for (int i = 0; i < StatisticsToPass[1]; i++) Player.IncreaseStamina();
+        for (int i = 0; i < StatisticsToPass[2]; i++) Player.IncreaseAgility();
+        for (int i = 0; i < StatisticsToPass[3]; i++) Player.IncreaseStrenght();
+        for (int i = 0; i < StatisticsToPass[4]; i++) Player.IncreasePrecision();
+        Debug.Log(GameManager.Instance.Player.Strenght);
     }
 }

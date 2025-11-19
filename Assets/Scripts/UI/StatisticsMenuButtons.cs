@@ -20,8 +20,8 @@ public class StatisticsMenuButtons : MonoBehaviour
     }
     public void StartFight()
     {
+        CurtainManager.Instance.ChangeScene("Fight", "Statistics", false);
         StatsManager.Instance.ConfirmStatistics();
-        SceneManager.LoadScene("Fight");
     }
 
     public void OnHealthButtonClicked()

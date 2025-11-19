@@ -5,7 +5,7 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void NewGame()
     {
-        CurtainManager.Instance.ShowCurtainAndChangeScene("Statistics", "MainMenu");
+        CurtainManager.Instance.ChangeScene("Statistics", "MainMenu",true);
     }
     public void ContinueGame()
     {

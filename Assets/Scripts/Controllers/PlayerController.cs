@@ -9,10 +9,6 @@ public class PlayerController : MonoBehaviour, CharacterController
     {
         Player = GameManager.Instance.Player;
     }
-    private void Start()
-    {
-        Player.Initialize("Player", 10, 100, 100, 10, 10, 10);
-    }
 
     public void MoveRight()
     {
