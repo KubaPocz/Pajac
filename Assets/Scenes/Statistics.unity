@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8886199ccdce79f4f89ca5c5c87909d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsManager
+  playerStats: {fileID: 0}
   PlayerStats: {fileID: 11400000, guid: 9d7769319b1c0db44b3a615aa85e3bed, type: 2}
 --- !u!4 &135986367
 Transform:
@@ -2277,8 +2278,7 @@ MonoBehaviour:
   AgilityPointsText: {fileID: 863291270}
   StrenghtPointsText: {fileID: 296477771}
   PrecisionPointsText: {fileID: 50319637}
-  PointsLeftText: {fileID: 1952270993}
-  PointsLeft: 10
+  PointsText: {fileID: 1952270993}
 --- !u!4 &1119105662
 Transform:
   m_ObjectHideFlags: 0
