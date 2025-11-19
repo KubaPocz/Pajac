@@ -4,12 +4,12 @@ using UnityEngine;
 public class StatsManager : MonoBehaviour
 {
     public static StatsManager Instance;
-    public CharacterInfo player;
-    private int StatPoints = 10;
+    public CharacterStats player;
     private int[] StatisticsToPass = new int[5];
     // Array containing statistics to pass towards CharacterInfo Methods
     // Following this format: 0-Health 1-Stamina 2-Agility 3-Strenght 4-Precision
     [SerializeField] public CharacterStats PlayerStats;
+    private int StatPoints = 10;
     private void Awake()
     {
         if (Instance != null)
@@ -22,11 +22,12 @@ public class StatsManager : MonoBehaviour
     private void Start()
     {
         player = GameManager.Instance.Player;
+        
     }
 
     public void AddHealthStatistic()
-    { 
-        if (StatPoints > 0) 
+    {
+        if (StatPoints > 0)
         {
             StatPoints--;
             StatisticsToPass[0]++;
@@ -72,12 +73,13 @@ public class StatsManager : MonoBehaviour
         Array.Clear(StatisticsToPass, 0, StatisticsToPass.Length);
     }
 
-    public void ConfirmStatistics() 
+    public void ConfirmStatistics()
     {
-        for (int i = StatisticsToPass[0]; i-- > 0;) PlayerStats.IncreaseHealth();
-        for (int i = StatisticsToPass[0]; i-- > 0;) PlayerStats.IncreaseStamina();
-        for (int i = StatisticsToPass[0]; i-- > 0;) PlayerStats.IncreaseAgility();
-        for (int i = StatisticsToPass[0]; i-- > 0;) PlayerStats.IncreaseStrenght();
-        for (int i = StatisticsToPass[0]; i-- > 0;) PlayerStats.IncreasePrecision();
+        Debug.Log("Confirm sent");
+        for (int i = 0; i < StatisticsToPass[0]; i++) { PlayerStats.IncreaseHealth(); Debug.Log("for executed"); }
+        for (int i = 0; i < StatisticsToPass[1]; i++) PlayerStats.IncreaseStamina();
+        for (int i = 0; i < StatisticsToPass[2]; i++) PlayerStats.IncreaseAgility();
+        for (int i = 0; i < StatisticsToPass[3]; i++) PlayerStats.IncreaseStrenght();
+        for (int i = 0; i < StatisticsToPass[4]; i++) PlayerStats.IncreasePrecision();
     }
 }
