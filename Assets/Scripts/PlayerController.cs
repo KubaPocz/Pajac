@@ -61,10 +61,10 @@ public class PlayerController : MonoBehaviour, CharacterController
     public void Dodge()
     {
         // Dodge chance based on agility (Zwinność)
-        float dodgeChance = (Player.Agility * 0.5f) * 0.8f; // Example: dodgeChance increases with agility
+        float dodgeChance = 0.1f * (Player.Agility - GameManager.Instance.Enemies[GameManager.Instance.CurrentEnemy].Agility);
         if (Random.value < dodgeChance)
         {
-            Debug.Log("Player successfully dodges the attack");
+            Debug.Log($"Player successfully dodges the attack{dodgeChance}");
         }
         else
         {
