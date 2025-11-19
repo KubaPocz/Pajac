@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Statistics.unity
     guid: 6130150759094bb429c5ab0be8fe7bd9
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene.unity
+    guid: a098ac5355d679f49bd7ae261b85e30a
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

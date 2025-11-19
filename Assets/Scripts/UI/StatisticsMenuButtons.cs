@@ -27,6 +27,7 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             HealthPointsText.text = (int.Parse(HealthPointsText.text) + 1).ToString();
             PointsLeft--;
+            PointsLeftText.text = PointsLeft.ToString();
         }
     }
 
@@ -37,6 +38,7 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             StaminaPointsText.text = (int.Parse(StaminaPointsText.text) + 1).ToString();
             PointsLeft--;
+            PointsLeftText.text = PointsLeft.ToString();
         }
     }
 
@@ -47,6 +49,7 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             AgilityPointsText.text = (int.Parse(AgilityPointsText.text) + 1).ToString();
             PointsLeft--;
+            PointsLeftText.text = PointsLeft.ToString();
         }
     }
 
@@ -57,6 +60,7 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             StrenghtPointsText.text = (int.Parse(StrenghtPointsText.text) + 1).ToString();
             PointsLeft--;
+            PointsLeftText.text = PointsLeft.ToString();
         }
     }
 
@@ -67,13 +71,15 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             PrecisionPointsText.text = (int.Parse(PrecisionPointsText.text) + 1).ToString();
             PointsLeft--;
+            PointsLeftText.text = PointsLeft.ToString();
         }
     }
 
     public void OnResetButtonClicked() 
     {
         StatsManager.Instance.ResetPoints();
-        PointsLeft--;
+        PointsLeft=10;
+        PointsLeftText.text = PointsLeft.ToString();
 
     }
 }
