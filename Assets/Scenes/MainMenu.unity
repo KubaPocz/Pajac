@@ -272,6 +272,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 57265938}
   m_CullTransparentMesh: 1
+--- !u!1 &72675924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72675926}
+  - component: {fileID: 72675925}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &72675925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72675924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 645b4828e8322e94eb2fc548662ced11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  Player: {fileID: 11400000, guid: 9d7769319b1c0db44b3a615aa85e3bed, type: 2}
+  Enemies:
+  - {fileID: 11400000, guid: 11e69a83608b01e4f9f5fbd7755aa400, type: 2}
+  - {fileID: 11400000, guid: b856557e3910be74f81a2a2ec159d8c9, type: 2}
+  - {fileID: 11400000, guid: 54d9f92d8f5f9734cae6ddc7f8e418e7, type: 2}
+  - {fileID: 11400000, guid: 431e591c645545a46adc8132290d77db, type: 2}
+  CurrentEnemy: 0
+--- !u!4 &72675926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72675924}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.38129, y: 520.1144, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &86177307
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,3 +1423,4 @@ SceneRoots:
   - {fileID: 2130385529}
   - {fileID: 86177310}
   - {fileID: 316823669}
+  - {fileID: 72675926}

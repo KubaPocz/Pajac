@@ -5,6 +5,10 @@ public class PlayerController : MonoBehaviour, CharacterController
     public CharacterStats Player;
     public float moveLenght = 5f;
 
+    private void Awake()
+    {
+        Player = GameManager.Instance.Player;
+    }
     private void Start()
     {
         Player.Initialize("Player", 10, 100, 100, 10, 10, 10);

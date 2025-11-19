@@ -29,6 +29,8 @@ public class CharacterStats : ScriptableObject
         Precision = precision;
     }
 
+    
+
     public void GetDamage(float ammount)
     {
         if(CurrentHealth - ammount>0f)
@@ -51,13 +53,19 @@ public class CharacterStats : ScriptableObject
     }
     public void IncreaseHealth()
     {
-        MaxHealth += 10f;
-        LevelPoints--;
+        if (LevelPoints > 0)
+        {
+            MaxHealth += 10f;
+            LevelPoints--;
+        }
     }
     public void IncreaseStamina()
     {
-        MaxStamina += 10f;
-        LevelPoints--;
+        if (LevelPoints > 0)
+        {
+            MaxStamina += 10f;
+            LevelPoints--;
+        }
     }
     public void IncreaseAgility()
     {
