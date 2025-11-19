@@ -4,16 +4,29 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class StatisticsMenuButtons : MonoBehaviour
 {
+<<<<<<< Updated upstream
     
    
+=======
+     
+>>>>>>> Stashed changes
     public TMP_Text HealthPointsText;
     public TMP_Text StaminaPointsText;
     public TMP_Text AgilityPointsText;
     public TMP_Text StrenghtPointsText;
     public TMP_Text PrecisionPointsText;
+<<<<<<< Updated upstream
     public TMP_Text PointsLeftText;
     public int PointsLeft=10;
+=======
+    public TMP_Text PointsText;
+    private int PointsLeft=10;
+>>>>>>> Stashed changes
 
+    public void Awake()
+    {
+        PointsText.text = (PointsLeft.ToString());
+    }
     public void StartFight()
     {
         StatsManager.Instance.ConfirmStatistics();
@@ -27,7 +40,11 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             HealthPointsText.text = (int.Parse(HealthPointsText.text) + 1).ToString();
             PointsLeft--;
+<<<<<<< Updated upstream
             PointsLeftText.text = PointsLeft.ToString();
+=======
+            PointsText.text = (PointsLeft.ToString());
+>>>>>>> Stashed changes
         }
     }
 
@@ -38,7 +55,11 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             StaminaPointsText.text = (int.Parse(StaminaPointsText.text) + 1).ToString();
             PointsLeft--;
+<<<<<<< Updated upstream
             PointsLeftText.text = PointsLeft.ToString();
+=======
+            PointsText.text = (PointsLeft.ToString());
+>>>>>>> Stashed changes
         }
     }
 
@@ -49,7 +70,11 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             AgilityPointsText.text = (int.Parse(AgilityPointsText.text) + 1).ToString();
             PointsLeft--;
+<<<<<<< Updated upstream
             PointsLeftText.text = PointsLeft.ToString();
+=======
+            PointsText.text = (PointsLeft.ToString());
+>>>>>>> Stashed changes
         }
     }
 
@@ -60,7 +85,11 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             StrenghtPointsText.text = (int.Parse(StrenghtPointsText.text) + 1).ToString();
             PointsLeft--;
+<<<<<<< Updated upstream
             PointsLeftText.text = PointsLeft.ToString();
+=======
+            PointsText.text = (PointsLeft.ToString());
+>>>>>>> Stashed changes
         }
     }
 
@@ -71,15 +100,29 @@ public class StatisticsMenuButtons : MonoBehaviour
         {
             PrecisionPointsText.text = (int.Parse(PrecisionPointsText.text) + 1).ToString();
             PointsLeft--;
+<<<<<<< Updated upstream
             PointsLeftText.text = PointsLeft.ToString();
+=======
+            PointsText.text = (PointsLeft.ToString());
+>>>>>>> Stashed changes
         }
     }
 
     public void OnResetButtonClicked() 
     {
+<<<<<<< Updated upstream
         StatsManager.Instance.ResetPoints();
         PointsLeft=10;
         PointsLeftText.text = PointsLeft.ToString();
 
+=======
+        PointsLeft = 10;
+        HealthPointsText.text = "0";
+        StaminaPointsText.text = "0";
+        AgilityPointsText.text = "0";
+        StrenghtPointsText.text = "0";
+        PrecisionPointsText.text = "0";
+        PointsText.text = (PointsLeft.ToString());
+>>>>>>> Stashed changes
     }
 }

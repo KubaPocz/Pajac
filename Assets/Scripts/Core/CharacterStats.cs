@@ -29,6 +29,8 @@ public class CharacterStats : ScriptableObject
         Precision = precision;
     }
 
+    
+
     public void GetDamage(float ammount)
     {
         if(CurrentHealth - ammount>0f)

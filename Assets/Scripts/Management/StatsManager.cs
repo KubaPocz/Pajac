@@ -4,7 +4,11 @@ using UnityEngine;
 public class StatsManager : MonoBehaviour
 {
     public static StatsManager Instance;
+<<<<<<< Updated upstream
     private CharacterStats player;
+=======
+    public CharacterInfo player;
+>>>>>>> Stashed changes
     private int[] StatisticsToPass = new int[5];
     // Array containing statistics to pass towards CharacterInfo Methods
     // Following this format: 0-Health 1-Stamina 2-Agility 3-Strenght 4-Precision
@@ -22,13 +26,22 @@ public class StatsManager : MonoBehaviour
     private void Start()
     {
         player = GameManager.Instance.Player;
+<<<<<<< Updated upstream
         
+=======
+        StatPoints = PlayerStats.LevelPoints;
+    }
+    private void OnEnable()
+    {
+        ResetPoints();
+>>>>>>> Stashed changes
     }
 
     public void AddHealthStatistic()
     {
         if (StatPoints > 0)
         {
+            Debug.Log("Health clicked");
             StatPoints--;
             StatisticsToPass[0]++;
         }
@@ -69,7 +82,7 @@ public class StatsManager : MonoBehaviour
 
     public void ResetPoints()
     {
-        StatPoints = 10;
+        StatPoints = PlayerStats.LevelPoints;
         Array.Clear(StatisticsToPass, 0, StatisticsToPass.Length);
     }
 
