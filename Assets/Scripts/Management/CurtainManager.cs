@@ -98,7 +98,6 @@ public class CurtainManager : MonoBehaviour
         {
             curtainImageDisplay.texture = closingCurtainFrames[i];
             yield return new WaitForSeconds(timePerFrame);  // Czas na ka¿d¹ klatkê
-            Debug.Log(i);
         }
     }
 

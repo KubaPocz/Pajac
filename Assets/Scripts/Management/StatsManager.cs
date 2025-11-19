@@ -5,13 +5,10 @@ public class StatsManager : MonoBehaviour
 {
     public static StatsManager Instance;
 
-    private CharacterStats player;
-
-    public CharacterStats playerStats;
     private int[] StatisticsToPass = new int[5];
     // Array containing statistics to pass towards CharacterInfo Methods
     // Following this format: 0-Health 1-Stamina 2-Agility 3-Strenght 4-Precision
-    [SerializeField] public CharacterStats PlayerStats;
+    public CharacterStats PlayerStats;
     private int StatPoints = 10;
     private void Awake()
     {
@@ -24,7 +21,7 @@ public class StatsManager : MonoBehaviour
     }
     private void Start()
     {
-        player = GameManager.Instance.Player;
+        PlayerStats = GameManager.Instance.Player;
         StatPoints = PlayerStats.LevelPoints;
     }
     private void OnEnable()
