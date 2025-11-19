@@ -3,7 +3,7 @@ using UnityEngine;
 public class StatsManager : MonoBehaviour
 {
     public static StatsManager Instance;
-    public CharacterInfo player;
+    public CharacterStats player;
     private void Awake()
     {
         if (Instance != null)
