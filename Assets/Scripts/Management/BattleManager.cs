@@ -6,6 +6,7 @@ public class BattleManager : MonoBehaviour
 
     public PlayerController player;
     public EnemyController enemy;
+    public ButtonsVisibility buttonsVisibility;
 
     private void Awake()
     {
@@ -52,5 +53,62 @@ public class BattleManager : MonoBehaviour
         log += "\n<color=white>==============================================</color>";
 
         Debug.Log(log);
+    }
+    public void SleepButton()
+    {
+        buttonsVisibility.HideAttacks();
+        buttonsVisibility.HideMoves();
+
+        //reszta
+    }
+    public void AttackButton()
+    {
+        buttonsVisibility.HideAll();
+        buttonsVisibility.ShowAttacks();
+
+        //reszta
+    }
+    public void LightAttackButton()
+    {
+        buttonsVisibility.HideAll();
+
+        //reszta
+    }
+    public void NormalAttackButton()
+    {
+        buttonsVisibility.HideAll();
+
+        //reszta
+    }
+    public void HardAttackButton()
+    {
+        buttonsVisibility.HideAll();
+
+        //reszta
+    }
+    public void BlockButton()
+    {
+        buttonsVisibility.HideAll();
+
+        //reszta
+    }
+    public void MoveButton()
+    {
+        buttonsVisibility.HideAll();
+        buttonsVisibility.ShowMoves();
+
+        //reszta
+    }
+    public void MoveLeftButton()
+    {
+        buttonsVisibility.HideAll();
+
+        //reszta
+    }
+    public void MoveRightButton()
+    {
+        buttonsVisibility.HideAll();
+
+        //reszta
     }
 }

@@ -81,6 +81,5 @@ public class StatsManager : MonoBehaviour
         for (int i = 0; i < StatisticsToPass[2]; i++) Player.IncreaseAgility();
         for (int i = 0; i < StatisticsToPass[3]; i++) Player.IncreaseStrenght();
         for (int i = 0; i < StatisticsToPass[4]; i++) Player.IncreasePrecision();
-        Debug.Log(GameManager.Instance.Player.Strenght);
     }
 }
