@@ -17,14 +17,13 @@ public class PlayerController : MonoBehaviour, CharacterController
     {
         isMyTurn = true;
         PlayerStats.NewTurnRegen();
-        Debug.Log("\n<color=blue>--- TURA GRACZA ---</color> (Wybierz akcję)");
+        Debug.Log("\n<color=blue>--- TURA GRACZA ---</color>");
     }
 
     private void Update()
     {
         if (!isMyTurn) return;
 
-        // Skip (K)
         if (Input.GetKeyDown(KeyCode.K)) { Debug.Log("SKIP"); EndTurn(); }
 
         // Sterowanie
@@ -40,7 +39,6 @@ public class PlayerController : MonoBehaviour, CharacterController
     private void EndTurn()
     {
         isMyTurn = false;
-        // Pokaż tabelkę i oddaj turę
         if (BattleManager.Instance != null)
         {
             BattleManager.Instance.LogBattleState();
@@ -49,52 +47,79 @@ public class PlayerController : MonoBehaviour, CharacterController
     }
 
     // --- AKCJE ---
-    public void MoveRight() { if (PlayerStats.UseStamina(5)) { transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 20f); EndTurn(); } }
-    public void MoveLeft() { if (PlayerStats.UseStamina(5)) { transform.Translate(Vector3.left * moveSpeed * Time.deltaTime * 20f); EndTurn(); } }
-    public void Sleep() { PlayerStats.RestoreStamina(40); EndTurn(); }
-    public void Block() { if (PlayerStats.UseStamina(15)) { PlayerStats.isBlocking = true; Debug.Log("Gracz: Postawa obronna."); EndTurn(); } }
+    public void MoveRight()
+    {
+        if (PlayerStats.UseStamina(5))
+        {
+            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 20f);
+            Debug.Log("Gracz: Ruch w prawo.");
+            EndTurn();
+        }
+    }
+    public void MoveLeft()
+    {
+        if (PlayerStats.UseStamina(5))
+        {
+            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime * 20f);
+            Debug.Log("Gracz: Ruch w lewo.");
+            EndTurn();
+        }
+    }
+    public void Sleep()
+    {
+        Debug.Log("Gracz: Idzie spać.");
+        PlayerStats.RestoreStamina(40);
+        EndTurn();
+    }
+    public void Block()
+    {
+        if (PlayerStats.UseStamina(15))
+        {
+            PlayerStats.isBlocking = true;
+            Debug.Log("<color=green>Gracz: Postawa obronna (BLOK).</color>");
+            EndTurn();
+        }
+    }
     public void Dodge() { }
 
     public void AttackLight() { TryPlayerAttack(10, 1.0f, "Lekki"); }
     public void AttackMedium() { TryPlayerAttack(20, 1.5f, "Średni"); }
     public void AttackStrong() { TryPlayerAttack(30, 2.0f, "Ciężki"); }
 
-    // --- MATEMATYKA ATAKU ---
+    // --- MATEMATYKA ATAKU (Tu są logi o przeciwniku) ---
     private void TryPlayerAttack(float cost, float multiplier, string name)
     {
         if (!PlayerStats.UseStamina(cost)) return;
         if (currentEnemy == null) return;
 
         CharacterStats target = currentEnemy.EnemyStats;
+        Debug.Log($"<color=green>Gracz: Wykonuje {name} atak!</color>");
 
-        // 1. Logika Trafienia
+        // 1. Czy trafiłeś?
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
         float hitRoll = Random.Range(0f, 100f);
-        Debug.Log($"[MATH] Gracz trafienie: Szansa {hitChance}% vs Wylosowano {hitRoll}");
 
         if (hitRoll > hitChance)
         {
-            Debug.Log($"<color=grey>Gracz: {name} atak PUDŁUJE!</color>");
+            Debug.Log($"<color=grey>... PUDŁO! (Szansa: {hitChance}%, Wylosowano: {hitRoll})</color>");
             EndTurn(); return;
         }
 
-        // 2. Logika Uniku
+        // 2. CZY PRZECIWNIK ROBI UNIK?
         float dodgeChance = 10f + (target.Agility - PlayerStats.Agility);
         dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
         float dodgeRoll = Random.Range(0f, 100f);
-        Debug.Log($"[MATH] Wróg unik: Szansa {dodgeChance}% vs Wylosowano {dodgeRoll}");
 
         if (dodgeRoll < dodgeChance)
         {
-            Debug.Log($"<color=yellow>Gracz: Wróg zrobił UNIK!</color>");
+            Debug.Log($"<color=orange>... PRZECIWNIK ZROBIŁ UNIK! (Szansa uniku: {dodgeChance}%)</color>");
             EndTurn(); return;
         }
 
         // 3. Obliczenie DMG
         float damage = PlayerStats.Strenght * multiplier;
-        Debug.Log($"[MATH] Dmg bazowy: {damage}");
 
-        // 4. Blok
+        // 4. CZY PRZECIWNIK BLOKUJE?
         if (target.isBlocking)
         {
             float reductionPercent = 50f + (target.Agility * 0.5f);
@@ -102,9 +127,11 @@ public class PlayerController : MonoBehaviour, CharacterController
 
             float reductionAmount = damage * (reductionPercent / 100f);
             damage -= reductionAmount;
-            Debug.Log($"[MATH] Wróg blokuje! Redukcja: {reductionPercent}% (-{reductionAmount} dmg)");
+
+            Debug.Log($"<color=orange>... PRZECIWNIK BLOKUJE! Zredukował obrażenia o {reductionPercent}% (-{reductionAmount} dmg).</color>");
         }
 
+        Debug.Log($"<color=red>... SUKCES! Przeciwnik otrzymuje {damage} obrażeń.</color>");
         target.GetDamage(damage);
         EndTurn();
     }
