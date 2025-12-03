@@ -1,84 +1,122 @@
 ﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour, CharacterController
+public class PlayerController : MonoBehaviour
 {
-    public CharacterStats Player;
-    public float moveLenght = 5f;
-    private bool isPlayerTurn = true;
+    public CharacterStats PlayerStats;
+    public float moveSpeed = 5f;
 
-    private void Awake()
+    // Potrzebujemy wroga, żeby go bić
+    private EnemyController enemyRef;
+
+    private void Start()
     {
-        Player = GameManager.Instance.Player;
+        if (GameManager.Instance != null) PlayerStats = GameManager.Instance.Player;
+        enemyRef = FindObjectOfType<EnemyController>();
     }
 
-    public void TakeTurn()
+    // Wywołaj to przyciskiem "End Turn" lub automatycznie na starcie tury gracza
+    public void StartPlayerTurn()
     {
-        isPlayerTurn = true;
+        PlayerStats.NewTurnRegen();
+        Debug.Log("<color=green>--- TURA GRACZA ---</color> (+20 Staminy)");
     }
+
+    // --- AKCJE GRACZA (Podpięte pod przyciski) ---
+
     public void MoveRight()
     {
-        // Move player to the right
-        transform.Translate(Vector3.right * moveLenght * Time.deltaTime);
-        Debug.Log("Player moves right");
+        if (PlayerStats.UseStamina(5)) // Koszt 5
+        {
+            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+        }
     }
 
     public void MoveLeft()
     {
-        // Move player to the left
-        transform.Translate(Vector3.left * moveLenght * Time.deltaTime);
-        Debug.Log("Player moves left");
+        if (PlayerStats.UseStamina(5)) // Koszt 5
+        {
+            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
+        }
     }
 
     public void Sleep()
     {
-        // Restore 40 stamina when the player sleeps
-        Player.RestoreStamina();
-        Debug.Log("Player rests and restores stamina");
+        PlayerStats.RestoreStamina(40); // Odnawia 40
+        Debug.Log("Gracz śpi (+40 Staminy).");
     }
 
     public void Block()
     {
-        // For this example, let's assume the player blocks and reduces the damage by 50%
-        double blockValue = 0.5 + (Player.Agility * 0.5);
-        if (blockValue > 0.8) 
+        if (PlayerStats.UseStamina(15)) // Koszt 15
         {
-            blockValue = 0.8;
+            PlayerStats.isBlocking = true;
+            Debug.Log("Gracz blokuje.");
         }
-        Debug.Log($"Player blocks the attack - damage reduced by {blockValue}");
     }
+
+    // --- ATAKI GRACZA ---
 
     public void AttackLight()
     {
-        // Light attack = strength * 1 (as per the stats provided)
-        float damage = Player.Strenght * 1;
-        Debug.Log($"Player performs a light attack and deals {damage} damage");
+        // Koszt 10, Dmg * 1
+        if (PlayerStats.UseStamina(10))
+            DealDamageToEnemy(PlayerStats.Strenght * 1.0f, "Lekki Atak");
+        else
+            Debug.Log("Za mało staminy!");
     }
 
     public void AttackMedium()
     {
-        // Medium attack = strength * 1.5 (as per the stats provided)
-        float damage = Player.Strenght * 1.5f;
-        Debug.Log($"Player performs a medium attack and deals {damage} damage");
-    }
-
-    public void AttackStrong()
-    {
-        // Strong attack = strength * 2 (as per the stats provided)
-        float damage = Player.Strenght * 2;
-        Debug.Log($"Player performs a strong attack and deals {damage} damage");
-    }
-
-    public void Dodge()
-    {
-        // Dodge chance based on agility (Zwinność)
-        float dodgeChance = 0.1f * (Player.Agility - GameManager.Instance.Enemies[GameManager.Instance.CurrentEnemy].Agility);
-        if (Random.value < dodgeChance)
-        {
-            Debug.Log($"Player successfully dodges the attack{dodgeChance}");
-        }
+        // Koszt 20, Dmg * 1.5
+        if (PlayerStats.UseStamina(20))
+            DealDamageToEnemy(PlayerStats.Strenght * 1.5f, "Średni Atak");
         else
+            Debug.Log("Za mało staminy!");
+    }
+
+    public void AttackHeavy()
+    {
+        // Koszt 30, Dmg * 2
+        if (PlayerStats.UseStamina(30))
+            DealDamageToEnemy(PlayerStats.Strenght * 2.0f, "Ciężki Atak");
+        else
+            Debug.Log("Za mało staminy!");
+    }
+
+    // --- KALKULATOR OBRAŻEŃ (Taki sam jak u wroga) ---
+    private void DealDamageToEnemy(float baseDamage, string attackName)
+    {
+        if (enemyRef == null) return;
+        CharacterStats target = enemyRef.EnemyStats;
+
+        // 1. Trafienie
+        float hitChance = 80f + (PlayerStats.Precision - target.Precision);
+        if (Random.Range(0f, 100f) > hitChance)
         {
-            Debug.Log("Player fails to dodge the attack");
+            Debug.Log($"Gracz: {attackName} PUDŁUJE!");
+            return;
         }
+
+        // 2. Unik Wroga
+        float dodgeChance = 10f + (target.Agility - PlayerStats.Agility);
+        dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
+        if (Random.Range(0f, 100f) < dodgeChance)
+        {
+            Debug.Log($"Gracz: Wróg zrobił UNIK!");
+            return;
+        }
+
+        // 3. Blok Wroga
+        float finalDamage = baseDamage;
+        if (target.isBlocking)
+        {
+            float reduction = 50f + (target.Agility * 0.5f);
+            if (reduction > 80f) reduction = 80f;
+            finalDamage -= finalDamage * (reduction / 100f);
+            Debug.Log("Gracz: Wróg zablokował część obrażeń.");
+        }
+
+        target.GetDamage(finalDamage);
+        Debug.Log($"Gracz: {attackName} trafia za {finalDamage} hp!");
     }
 }
