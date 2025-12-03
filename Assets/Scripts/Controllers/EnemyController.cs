@@ -1,199 +1,162 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, CharacterController
 {
-    [Header("PLIKI STATYSTYK")]
+    [Header("Statystyki")]
     public CharacterStats EnemyStats;
     public CharacterStats TargetStats;
-
-    [Header("CEL")]
     public Transform TargetTransform;
 
-    [Header("Ustawienia AI")]
+    [Header("AI Config")]
     public float attackRange = 2.0f;
     public float moveSpeed = 4.0f;
-    public float actionDelay = 1.0f;
 
     private void Start()
     {
         if (EnemyStats != null) EnemyStats.Initialize();
         if (TargetStats != null) TargetStats.Initialize();
 
+        // Auto-find gracza
         if (TargetTransform == null)
         {
-            GameObject player = GameObject.Find("Player");
-            if (player != null) TargetTransform = player.transform;
+            var p = GameObject.Find("Player");
+            if (p != null) TargetTransform = p.transform;
         }
     }
 
-    private void Update()
+    // --- INTERFEJS CHARACTER CONTROLLER ---
+    // Ta metoda jest wołana przez BattleManager!
+    public void TakeTurn()
     {
-        if (Input.GetKeyDown(KeyCode.T)) StartTurn();
+        StartCoroutine(AI_Logic());
     }
 
-    public void StartTurn()
+    // Metody wymagane przez interfejs (AI używa ich wewnątrz swojej logiki)
+    public void MoveRight() { }
+    public void MoveLeft() { }
+    public void Sleep() { EnemyStats.RestoreStamina(40); }
+    public void Block()
     {
-        StartCoroutine(MakeDecision());
+        if (EnemyStats.UseStamina(15)) EnemyStats.isBlocking = true;
     }
+    public void AttackLight() { PerformSpecificAttack(10, 1.0f, "Lekki"); }
+    public void AttackMedium() { PerformSpecificAttack(20, 1.5f, "Średni"); }
+    public void AttackStrong() { PerformSpecificAttack(30, 2.0f, "Ciężki"); }
+    public void Dodge() { } // AI robi uniki pasywnie (matematyka), nie aktywnie
 
-    private IEnumerator MakeDecision()
+    // --- LOGIKA AI ---
+
+    private IEnumerator AI_Logic()
     {
-        if (TargetTransform == null || TargetStats == null || EnemyStats == null) yield break;
-
-        // Reset flagi bloku (bez dodawania staminy)
-        EnemyStats.NewTurnRegen();
-
-        yield return new WaitForSeconds(actionDelay);
+        EnemyStats.NewTurnRegen(); // +20 Staminy na start tury (wg dokumentacji)
+        yield return new WaitForSeconds(1.0f); // Czas na myślenie
 
         if (EnemyStats.CurrentHealth <= 0 || TargetStats.CurrentHealth <= 0)
         {
-            Debug.Log("Walka zakończona.");
+            // Koniec gry, nie oddajemy tury
             yield break;
         }
 
         float dist = Vector3.Distance(transform.position, TargetTransform.position);
-        float currentStamina = EnemyStats.CurrentStamina;
 
-        // --- NOWA LOGIKA DECYZYJNA ---
-
-        // Sytuacja 1: Jestem w zasięgu ataku
-        if (dist <= attackRange + 0.2f)
+        // DRZEWO DECYZYJNE WG KOSZTÓW I ZASAD
+        // 1. Mało staminy (<20) -> Śpij (Odnawia 40)
+        if (EnemyStats.CurrentStamina < 20)
         {
-            // Czy mam siłę na chociaż najsłabszy atak (koszt 10)?
-            if (currentStamina >= 10)
-            {
-                PerformAttack();
-            }
-            else
-            {
-                // Jestem blisko, ale nie mam siły machnąć mieczem -> ŚPIJ
-                Debug.Log("AI: Jest blisko, ale brak sił na atak -> Śpi.");
-                Sleep();
-            }
+            Sleep();
+            Debug.Log("AI: Odpoczywa.");
         }
-        // Sytuacja 2: Jestem za daleko, muszę podejść
+        // 2. W zasięgu ataku?
+        else if (dist <= attackRange + 0.2f)
+        {
+            // Decyzja jaki atak
+            float st = EnemyStats.CurrentStamina;
+            if (st >= 30 && Random.value > 0.6f) AttackStrong();
+            else if (st >= 20 && Random.value > 0.4f) AttackMedium();
+            else AttackLight();
+        }
+        // 3. Za daleko? Podejdź (Koszt 5)
         else
         {
-            // Czy mam siłę na ruch (koszt 5)?
-            if (currentStamina >= 5)
+            if (EnemyStats.UseStamina(5))
             {
-                // Jeśli mam dużo życia, to po prostu idę
-                // Ale jeśli mam mało życia (<30%) i mało staminy, to może lepiej spać z daleka?
-                // Tutaj zrobimy prosto: jak stać nas na ruch, to idziemy.
-                yield return StartCoroutine(MoveTowardsPlayerRoutine(dist));
+                yield return StartCoroutine(MoveRoutine(dist));
             }
             else
             {
-                // Nie mam siły nawet chodzić -> ŚPIJ
-                Debug.Log("AI: Za daleko i brak sił na ruch -> Śpi.");
-                Sleep();
+                Sleep(); // Brak siły na ruch -> Śpij
             }
         }
 
-        Debug.Log("--> KONIEC TURY WROGA.");
+        yield return new WaitForSeconds(0.5f);
+
+        // KONIEC TURY - Oddajemy sterowanie do Gracza przez BattleManager
+        if (BattleManager.Instance != null)
+            BattleManager.Instance.StartPlayerTurn();
     }
 
-    private IEnumerator MoveTowardsPlayerRoutine(float currentDistance)
+    // --- MATEMATYKA WALKI (Z DOKUMENTACJI) ---
+
+    private void PerformSpecificAttack(float staminaCost, float dmgMultiplier, string name)
     {
-        // Próba zużycia 5 staminy
-        if (!EnemyStats.UseStamina(5))
+        // 1. Sprawdź staminę
+        if (!EnemyStats.UseStamina(staminaCost))
         {
-            // To zabezpieczenie, teoretycznie sprawdzone wyżej, ale dla pewności:
-            Sleep();
-            yield break;
-        }
-
-        Debug.Log("AI: Wykonuje ruch.");
-
-        Vector3 start = transform.position;
-        Vector3 target = TargetTransform.position;
-        Vector3 dir = (target - start).normalized;
-        float distToTravel = currentDistance - attackRange;
-        float step = Mathf.Min(distToTravel, moveSpeed);
-
-        if (step > 0.1f)
-        {
-            float timer = 0;
-            while (timer < 1.0f)
-            {
-                transform.position = Vector3.Lerp(start, start + (dir * step), timer);
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            transform.position = start + (dir * step);
-        }
-    }
-
-    private void PerformAttack()
-    {
-        float st = EnemyStats.CurrentStamina;
-        float roll = Random.value;
-
-        // AI decyduje jaki atak wykonać na podstawie dostępnej staminy
-        if (st >= 30 && roll > 0.6f) AttackHeavy();
-        else if (st >= 20 && roll > 0.3f) AttackMedium();
-        else AttackLight();
-    }
-
-    public void Sleep()
-    {
-        EnemyStats.RestoreStamina(40);
-    }
-
-    public void Block() // Opcjonalnie AI może blokować, jeśli dodasz warunek w logice
-    {
-        if (EnemyStats.UseStamina(15))
-        {
-            EnemyStats.isBlocking = true;
-            Debug.Log("AI: Podnosi gardę.");
-        }
-    }
-
-    public void AttackLight()
-    {
-        if (EnemyStats.UseStamina(10))
-            TryDealDamage(EnemyStats.Strenght * 1.0f, "Lekki Atak");
-    }
-
-    public void AttackMedium()
-    {
-        if (EnemyStats.UseStamina(20))
-            TryDealDamage(EnemyStats.Strenght * 1.5f, "Średni Atak");
-    }
-
-    public void AttackHeavy()
-    {
-        if (EnemyStats.UseStamina(30))
-            TryDealDamage(EnemyStats.Strenght * 2.0f, "Ciężki Atak");
-    }
-
-    private void TryDealDamage(float baseDamage, string attackName)
-    {
-        float hitChance = 80f + (EnemyStats.Precision - TargetStats.Precision);
-        if (Random.Range(0f, 100f) > hitChance)
-        {
-            Debug.Log($"AI: {attackName} PUDŁUJE!");
+            Sleep(); // Jak chciał zaatakować a nie ma siły, traci turę na sen
             return;
         }
 
+        // 2. Szansa trafienia: 80% + (Prec Atakującego - Prec Obrońcy)
+        float hitChance = 80f + (EnemyStats.Precision - TargetStats.Precision);
+        if (Random.Range(0f, 100f) > hitChance)
+        {
+            Debug.Log($"AI: {name} atak PUDŁUJE! (Szansa: {hitChance}%)");
+            return;
+        }
+
+        // 3. Szansa na unik: 10% + (Agi Obrońcy - Agi Atakującego), min 5 max 50
         float dodgeChance = 10f + (TargetStats.Agility - EnemyStats.Agility);
         dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
         if (Random.Range(0f, 100f) < dodgeChance)
         {
-            Debug.Log($"AI: {attackName} UNIKNIĘTY przez gracza!");
+            Debug.Log($"AI: Gracz zrobił UNIK! (Szansa: {dodgeChance}%)");
             return;
         }
 
-        float finalDamage = baseDamage;
+        // 4. Obliczenie obrażeń: Siła * Mnożnik
+        float damage = EnemyStats.Strenght * dmgMultiplier;
+
+        // 5. Redukcja blokiem: 50% + (Agi * 0.5%), max 80%
         if (TargetStats.isBlocking)
         {
             float reduction = 50f + (TargetStats.Agility * 0.5f);
             if (reduction > 80f) reduction = 80f;
-            finalDamage -= finalDamage * (reduction / 100f);
-            Debug.Log($"AI: Atak częściowo zablokowany (-{reduction}%).");
+
+            damage -= damage * (reduction / 100f);
+            Debug.Log($"AI: Gracz zablokował atak. Zredukowano o {reduction}%.");
         }
 
-        TargetStats.GetDamage(finalDamage);
+        TargetStats.GetDamage(damage);
+    }
+
+    private IEnumerator MoveRoutine(float currentDist)
+    {
+        Vector3 start = transform.position;
+        Vector3 target = TargetTransform.position;
+        Vector3 dir = (target - start).normalized;
+        float travel = Mathf.Min(currentDist - attackRange, moveSpeed);
+
+        if (travel > 0.1f)
+        {
+            float t = 0;
+            while (t < 1f)
+            {
+                transform.position = Vector3.Lerp(start, start + dir * travel, t);
+                t += Time.deltaTime;
+                yield return null;
+            }
+            transform.position = start + dir * travel;
+        }
     }
 }

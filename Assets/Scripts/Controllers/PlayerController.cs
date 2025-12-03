@@ -1,122 +1,111 @@
 ﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, CharacterController
 {
     public CharacterStats PlayerStats;
     public float moveSpeed = 5f;
-
-    // Potrzebujemy wroga, żeby go bić
-    private EnemyController enemyRef;
+    private bool isMyTurn = false;
+    private EnemyController currentEnemy;
 
     private void Start()
     {
         if (GameManager.Instance != null) PlayerStats = GameManager.Instance.Player;
-        enemyRef = FindObjectOfType<EnemyController>();
+        currentEnemy = FindObjectOfType<EnemyController>();
     }
 
-    // Wywołaj to przyciskiem "End Turn" lub automatycznie na starcie tury gracza
-    public void StartPlayerTurn()
+    public void TakeTurn()
     {
+        isMyTurn = true;
         PlayerStats.NewTurnRegen();
-        Debug.Log("<color=green>--- TURA GRACZA ---</color> (+20 Staminy)");
+        Debug.Log("\n<color=blue>--- TURA GRACZA ---</color> (Wybierz akcję)");
     }
 
-    // --- AKCJE GRACZA (Podpięte pod przyciski) ---
-
-    public void MoveRight()
+    private void Update()
     {
-        if (PlayerStats.UseStamina(5)) // Koszt 5
+        if (!isMyTurn) return;
+
+        // Skip (K)
+        if (Input.GetKeyDown(KeyCode.K)) { Debug.Log("SKIP"); EndTurn(); }
+
+        // Sterowanie
+        if (Input.GetKeyDown(KeyCode.A)) AttackLight();
+        if (Input.GetKeyDown(KeyCode.S)) AttackMedium();
+        if (Input.GetKeyDown(KeyCode.D)) AttackStrong();
+        if (Input.GetKeyDown(KeyCode.Space)) Sleep();
+        if (Input.GetKeyDown(KeyCode.B)) Block();
+        if (Input.GetKeyDown(KeyCode.RightArrow)) MoveRight();
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) MoveLeft();
+    }
+
+    private void EndTurn()
+    {
+        isMyTurn = false;
+        // Pokaż tabelkę i oddaj turę
+        if (BattleManager.Instance != null)
         {
-            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+            BattleManager.Instance.LogBattleState();
+            BattleManager.Instance.StartEnemyTurn();
         }
     }
 
-    public void MoveLeft()
+    // --- AKCJE ---
+    public void MoveRight() { if (PlayerStats.UseStamina(5)) { transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 20f); EndTurn(); } }
+    public void MoveLeft() { if (PlayerStats.UseStamina(5)) { transform.Translate(Vector3.left * moveSpeed * Time.deltaTime * 20f); EndTurn(); } }
+    public void Sleep() { PlayerStats.RestoreStamina(40); EndTurn(); }
+    public void Block() { if (PlayerStats.UseStamina(15)) { PlayerStats.isBlocking = true; Debug.Log("Gracz: Postawa obronna."); EndTurn(); } }
+    public void Dodge() { }
+
+    public void AttackLight() { TryPlayerAttack(10, 1.0f, "Lekki"); }
+    public void AttackMedium() { TryPlayerAttack(20, 1.5f, "Średni"); }
+    public void AttackStrong() { TryPlayerAttack(30, 2.0f, "Ciężki"); }
+
+    // --- MATEMATYKA ATAKU ---
+    private void TryPlayerAttack(float cost, float multiplier, string name)
     {
-        if (PlayerStats.UseStamina(5)) // Koszt 5
-        {
-            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
-        }
-    }
+        if (!PlayerStats.UseStamina(cost)) return;
+        if (currentEnemy == null) return;
 
-    public void Sleep()
-    {
-        PlayerStats.RestoreStamina(40); // Odnawia 40
-        Debug.Log("Gracz śpi (+40 Staminy).");
-    }
+        CharacterStats target = currentEnemy.EnemyStats;
 
-    public void Block()
-    {
-        if (PlayerStats.UseStamina(15)) // Koszt 15
-        {
-            PlayerStats.isBlocking = true;
-            Debug.Log("Gracz blokuje.");
-        }
-    }
-
-    // --- ATAKI GRACZA ---
-
-    public void AttackLight()
-    {
-        // Koszt 10, Dmg * 1
-        if (PlayerStats.UseStamina(10))
-            DealDamageToEnemy(PlayerStats.Strenght * 1.0f, "Lekki Atak");
-        else
-            Debug.Log("Za mało staminy!");
-    }
-
-    public void AttackMedium()
-    {
-        // Koszt 20, Dmg * 1.5
-        if (PlayerStats.UseStamina(20))
-            DealDamageToEnemy(PlayerStats.Strenght * 1.5f, "Średni Atak");
-        else
-            Debug.Log("Za mało staminy!");
-    }
-
-    public void AttackHeavy()
-    {
-        // Koszt 30, Dmg * 2
-        if (PlayerStats.UseStamina(30))
-            DealDamageToEnemy(PlayerStats.Strenght * 2.0f, "Ciężki Atak");
-        else
-            Debug.Log("Za mało staminy!");
-    }
-
-    // --- KALKULATOR OBRAŻEŃ (Taki sam jak u wroga) ---
-    private void DealDamageToEnemy(float baseDamage, string attackName)
-    {
-        if (enemyRef == null) return;
-        CharacterStats target = enemyRef.EnemyStats;
-
-        // 1. Trafienie
+        // 1. Logika Trafienia
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
-        if (Random.Range(0f, 100f) > hitChance)
+        float hitRoll = Random.Range(0f, 100f);
+        Debug.Log($"[MATH] Gracz trafienie: Szansa {hitChance}% vs Wylosowano {hitRoll}");
+
+        if (hitRoll > hitChance)
         {
-            Debug.Log($"Gracz: {attackName} PUDŁUJE!");
-            return;
+            Debug.Log($"<color=grey>Gracz: {name} atak PUDŁUJE!</color>");
+            EndTurn(); return;
         }
 
-        // 2. Unik Wroga
+        // 2. Logika Uniku
         float dodgeChance = 10f + (target.Agility - PlayerStats.Agility);
         dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
-        if (Random.Range(0f, 100f) < dodgeChance)
+        float dodgeRoll = Random.Range(0f, 100f);
+        Debug.Log($"[MATH] Wróg unik: Szansa {dodgeChance}% vs Wylosowano {dodgeRoll}");
+
+        if (dodgeRoll < dodgeChance)
         {
-            Debug.Log($"Gracz: Wróg zrobił UNIK!");
-            return;
+            Debug.Log($"<color=yellow>Gracz: Wróg zrobił UNIK!</color>");
+            EndTurn(); return;
         }
 
-        // 3. Blok Wroga
-        float finalDamage = baseDamage;
+        // 3. Obliczenie DMG
+        float damage = PlayerStats.Strenght * multiplier;
+        Debug.Log($"[MATH] Dmg bazowy: {damage}");
+
+        // 4. Blok
         if (target.isBlocking)
         {
-            float reduction = 50f + (target.Agility * 0.5f);
-            if (reduction > 80f) reduction = 80f;
-            finalDamage -= finalDamage * (reduction / 100f);
-            Debug.Log("Gracz: Wróg zablokował część obrażeń.");
+            float reductionPercent = 50f + (target.Agility * 0.5f);
+            if (reductionPercent > 80f) reductionPercent = 80f;
+
+            float reductionAmount = damage * (reductionPercent / 100f);
+            damage -= reductionAmount;
+            Debug.Log($"[MATH] Wróg blokuje! Redukcja: {reductionPercent}% (-{reductionAmount} dmg)");
         }
 
-        target.GetDamage(finalDamage);
-        Debug.Log($"Gracz: {attackName} trafia za {finalDamage} hp!");
+        target.GetDamage(damage);
+        EndTurn();
     }
 }

@@ -5,12 +5,11 @@ public class CharacterStats : ScriptableObject
 {
     public string CharacterName;
 
-    [Header("Status Walki")]
+    [Header("Status")]
     public float CurrentHealth;
     public float MaxHealth;
     public float CurrentStamina;
     public float MaxStamina;
-
     public bool isBlocking = false;
 
     [Header("Atrybuty")]
@@ -20,13 +19,12 @@ public class CharacterStats : ScriptableObject
     public int LevelPoints;
 
     // --- INICJALIZACJA ---
-    public void Initialize(string characterName, int levelPoints, float maxHealth, float maxStamina, int agility, int strenght, int precision)
+    public void Initialize(string name, int levels, float hp, float sta, int agi, int str, int prec)
     {
-        CharacterName = characterName;
-        LevelPoints = levelPoints;
-        MaxHealth = maxHealth; CurrentHealth = MaxHealth;
-        MaxStamina = maxStamina; CurrentStamina = MaxStamina;
-        Agility = agility; Strenght = strenght; Precision = precision;
+        CharacterName = name; LevelPoints = levels;
+        MaxHealth = hp; CurrentHealth = hp;
+        MaxStamina = sta; CurrentStamina = sta;
+        Agility = agi; Strenght = str; Precision = prec;
         isBlocking = false;
     }
 
@@ -41,43 +39,40 @@ public class CharacterStats : ScriptableObject
 
     public void NewTurnRegen()
     {
-        // ZMIANA: Tylko resetujemy blok. NIE dodajemy staminy.
+        // TYLKO RESET BLOKU - BRAK DODAWANIA STAMINY
         isBlocking = false;
-        Debug.Log($"<color=cyan>[TURA]</color> {CharacterName}: Nowa tura (Reset bloku). Stan: {CurrentStamina}/{MaxStamina}");
+        Debug.Log($"<color=grey>[TURA]</color> {CharacterName}: Rozpoczyna turę. Blok zdjęty.");
     }
 
     public void GetDamage(float amount)
     {
-        float previousHP = CurrentHealth;
-        if (CurrentHealth - amount > 0f) CurrentHealth -= amount;
-        else CurrentHealth = 0f;
+        float before = CurrentHealth;
+        CurrentHealth -= amount;
+        if (CurrentHealth < 0) CurrentHealth = 0;
 
-        Debug.Log($"<color=red>[OBRAŻENIA]</color> {CharacterName} otrzymał {amount} dmg. HP: {previousHP} -> {CurrentHealth}");
+        Debug.Log($"<color=red>[OBRAŻENIA]</color> {CharacterName} traci {amount} HP. ({before} -> {CurrentHealth})");
     }
 
     public bool UseStamina(float amount)
     {
         if (CurrentStamina >= amount)
         {
-            float previousSta = CurrentStamina;
+            float before = CurrentStamina;
             CurrentStamina -= amount;
-            Debug.Log($"<color=orange>[KOSZT]</color> {CharacterName} zużywa {amount} staminy. ({previousSta} -> {CurrentStamina})");
+            Debug.Log($"<color=orange>[KOSZT]</color> {CharacterName} zużył {amount} Stam. ({before} -> {CurrentStamina})");
             return true;
         }
-        else
-        {
-            Debug.Log($"<color=grey>[BRAK SIŁ]</color> {CharacterName} chciał zużyć {amount}, ale ma tylko {CurrentStamina}!");
-            return false;
-        }
+
+        Debug.Log($"<color=grey>[BRAK SIŁ]</color> {CharacterName} potrzebuje {amount}, ale ma {CurrentStamina} Stam.");
+        return false;
     }
 
     public void RestoreStamina(float amount = 40f)
     {
-        float previousSta = CurrentStamina;
+        float before = CurrentStamina;
         CurrentStamina += amount;
         if (CurrentStamina > MaxStamina) CurrentStamina = MaxStamina;
-
-        Debug.Log($"<color=green>[ODPOCZYNEK]</color> {CharacterName} odpoczywa (+{amount}). Sta: {previousSta} -> {CurrentStamina}");
+        Debug.Log($"<color=green>[SEN]</color> {CharacterName} odnowił {amount} Stam. ({before} -> {CurrentStamina})");
     }
 
     // --- ROZWÓJ POSTACI ---
