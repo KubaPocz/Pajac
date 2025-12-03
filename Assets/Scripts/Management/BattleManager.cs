@@ -18,11 +18,11 @@ public class BattleManager : MonoBehaviour
 
     public void StartEnemyTurn()
     {
-        enemy.TakeTurn();
+        enemy.Move();
     }
 
     public void StartPlayerTurn()
     {
-        player.TakeTurn();
+        player.Move();
     }
 }

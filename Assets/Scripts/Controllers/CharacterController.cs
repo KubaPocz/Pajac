@@ -2,7 +2,7 @@ using UnityEngine.Scripting.APIUpdating;
 
 public interface CharacterController
 {
-    public void TakeTurn();
+    public void Move();
     public  void MoveRight();
     public  void MoveLeft();
     public  void Sleep();

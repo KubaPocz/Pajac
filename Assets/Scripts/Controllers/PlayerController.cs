@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         Player = GameManager.Instance.Player;
     }
 
-    public void TakeTurn()
+    private void Move()
     {
         isPlayerTurn = true;
     }
