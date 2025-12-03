@@ -4,12 +4,17 @@ public class PlayerController : MonoBehaviour, CharacterController
 {
     public CharacterStats Player;
     public float moveLenght = 5f;
+    private bool isPlayerTurn = true;
 
     private void Awake()
     {
         Player = GameManager.Instance.Player;
     }
 
+    public void TakeTurn()
+    {
+        isPlayerTurn = true;
+    }
     public void MoveRight()
     {
         // Move player to the right
