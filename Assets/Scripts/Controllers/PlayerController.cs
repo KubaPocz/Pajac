@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         currentEnemy = FindObjectOfType<EnemyController>();
     }
 
-    public void TakeTurn()
+    public void Move()
     {
         isMyTurn = true;
         PlayerStats.NewTurnRegen();

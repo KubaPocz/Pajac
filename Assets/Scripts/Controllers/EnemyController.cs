@@ -54,7 +54,7 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log("");
     }
 
-    public void TakeTurn()
+    public void Move()
     {
         StartCoroutine(AI_Logic());
     }
@@ -333,14 +333,4 @@ public class EnemyController : MonoBehaviour, CharacterController
             BattleManager.Instance.StartPlayerTurn();
         }
     }
-
-    // Puste implementacje interfejsu (wymagane)
-    public void MoveRight() { }
-    public void MoveLeft() { }
-    public void Dodge() { }
-    public void AttackLight() { }
-    public void AttackMedium() { }
-    public void AttackStrong() { }
-    public void Sleep() { }
-    public void Block() { }
 }
