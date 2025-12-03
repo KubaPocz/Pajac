@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class StatisticsMenuButtons : MonoBehaviour
 {
-     
+    public CharacterStats Player;
     public TMP_Text HealthPointsText;
     public TMP_Text StaminaPointsText;
     public TMP_Text AgilityPointsText;
@@ -17,6 +17,12 @@ public class StatisticsMenuButtons : MonoBehaviour
     public void Awake()
     {
         PointsText.text = (PointsLeft.ToString());
+        HealthPointsText.text = Player.MaxHealth.ToString();
+        StaminaPointsText.text = Player.MaxStamina.ToString();
+        AgilityPointsText.text = Player.Agility.ToString();
+        StrenghtPointsText.text = Player.Strenght.ToString();
+        PrecisionPointsText.text = Player.Precision.ToString();
+
     }
     public void StartFight()
     {
@@ -29,7 +35,7 @@ public class StatisticsMenuButtons : MonoBehaviour
         StatsManager.Instance.AddHealthStatistic();
         if (PointsLeft > 0)
         {
-            HealthPointsText.text = (int.Parse(HealthPointsText.text) + 1).ToString();
+            HealthPointsText.text = (int.Parse(HealthPointsText.text) + 10).ToString();
             PointsLeft--;
             PointsText.text = (PointsLeft.ToString());
         }
@@ -40,7 +46,7 @@ public class StatisticsMenuButtons : MonoBehaviour
         StatsManager.Instance.AddStaminaStatistic();
         if (PointsLeft > 0)
         {
-            StaminaPointsText.text = (int.Parse(StaminaPointsText.text) + 1).ToString();
+            StaminaPointsText.text = (int.Parse(StaminaPointsText.text) + 10).ToString();
             PointsLeft--;
             PointsText.text = (PointsLeft.ToString());
         }
@@ -82,11 +88,12 @@ public class StatisticsMenuButtons : MonoBehaviour
     public void OnResetButtonClicked() 
     {
         PointsLeft = 10;
-        HealthPointsText.text = "0";
-        StaminaPointsText.text = "0";
-        AgilityPointsText.text = "0";
-        StrenghtPointsText.text = "0";
-        PrecisionPointsText.text = "0";
+        HealthPointsText.text = "100";
+        StaminaPointsText.text = "100";
+        AgilityPointsText.text = "10";
+        StrenghtPointsText.text = "10";
+        PrecisionPointsText.text = "10";
         PointsText.text = (PointsLeft.ToString());
+        StatsManager.Instance.ResetPoints();
     }
 }

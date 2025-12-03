@@ -275,7 +275,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 10356592}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: StartFight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &10356592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,7 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8886199ccdce79f4f89ca5c5c87909d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsManager
-  Player: {fileID: 0}
+  Player: {fileID: 11400000, guid: 9d7769319b1c0db44b3a615aa85e3bed, type: 2}
 --- !u!4 &135986367
 Transform:
   m_ObjectHideFlags: 0
@@ -551,7 +563,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 241307789}
-  - component: {fileID: 241307790}
   m_Layer: 5
   m_Name: STRENGHT
   m_TagString: Untagged
@@ -581,20 +592,6 @@ RectTransform:
   m_AnchoredPosition: {x: -158.4514, y: -56}
   m_SizeDelta: {x: 296.09732, y: 37.194504}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &241307790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 241307788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65a45e1fb336096459bf203406b150f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatsPair
-  Value: {fileID: 522461796}
-  Button: {fileID: 1136779096}
 --- !u!1 &274663827
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,7 +1372,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 395149580}
-  - component: {fileID: 395149581}
   m_Layer: 5
   m_Name: AGILITY
   m_TagString: Untagged
@@ -1405,20 +1401,6 @@ RectTransform:
   m_AnchoredPosition: {x: -158.4514, y: -15.000001}
   m_SizeDelta: {x: 296.09732, y: 37.194504}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &395149581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395149579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65a45e1fb336096459bf203406b150f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatsPair
-  Value: {fileID: 1394725708}
-  Button: {fileID: 478289628}
 --- !u!1 &405922705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1632,7 +1614,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 478289629}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: OnAgilityButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &478289629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1752,7 +1746,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 512677652}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: OnResetButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &512677652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1848,7 +1854,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 641acaf5af8478140878196e414343f6, type: 2}
   m_sharedMaterial: {fileID: -6898459000713504695, guid: 641acaf5af8478140878196e414343f6, type: 2}
@@ -1936,7 +1942,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 547344334}
-  - component: {fileID: 547344335}
   m_Layer: 5
   m_Name: STAMINA
   m_TagString: Untagged
@@ -1966,20 +1971,6 @@ RectTransform:
   m_AnchoredPosition: {x: -158.4514, y: 26}
   m_SizeDelta: {x: 296.09732, y: 37.194504}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &547344335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 547344333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65a45e1fb336096459bf203406b150f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatsPair
-  Value: {fileID: 1583242734}
-  Button: {fileID: 1960600582}
 --- !u!1 &555863575
 GameObject:
   m_ObjectHideFlags: 0
@@ -2193,7 +2184,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 557937750}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: OnPrecisionButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &557937750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2241,7 +2244,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 664482730}
-  - component: {fileID: 664482731}
   m_Layer: 5
   m_Name: HP
   m_TagString: Untagged
@@ -2271,20 +2273,6 @@ RectTransform:
   m_AnchoredPosition: {x: -158.45139, y: 67}
   m_SizeDelta: {x: 296.0973, y: 37.194504}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &664482731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664482729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65a45e1fb336096459bf203406b150f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatsPair
-  Value: {fileID: 2076023707}
-  Button: {fileID: 1586853154}
 --- !u!1 &693977905
 GameObject:
   m_ObjectHideFlags: 0
@@ -3413,6 +3401,142 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1010874694}
   m_CullTransparentMesh: 1
+--- !u!1 &1072980974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1072980977}
+  - component: {fileID: 1072980976}
+  - component: {fileID: 1072980975}
+  m_Layer: 5
+  m_Name: Points_Value
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1072980975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072980974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 10
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 641acaf5af8478140878196e414343f6, type: 2}
+  m_sharedMaterial: {fileID: -6898459000713504695, guid: 641acaf5af8478140878196e414343f6, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1072980976
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072980974}
+  m_CullTransparentMesh: 1
+--- !u!224 &1072980977
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072980974}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1280231691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 217, y: -165.99994}
+  m_SizeDelta: {x: 80.2611, y: 37.194}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1109364985
 GameObject:
   m_ObjectHideFlags: 0
@@ -3574,12 +3698,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1a785d4eea6a24448f655f2c9a7caef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatisticsMenuButtons
-  HealthPointsText: {fileID: 274663829}
-  StaminaPointsText: {fileID: 1817455173}
-  AgilityPointsText: {fileID: 863291270}
-  StrenghtPointsText: {fileID: 296477771}
-  PrecisionPointsText: {fileID: 50319637}
-  PointsText: {fileID: 1952270993}
+  Player: {fileID: 11400000, guid: 9d7769319b1c0db44b3a615aa85e3bed, type: 2}
+  HealthPointsText: {fileID: 2076023707}
+  StaminaPointsText: {fileID: 1583242734}
+  AgilityPointsText: {fileID: 1394725708}
+  StrenghtPointsText: {fileID: 522461796}
+  PrecisionPointsText: {fileID: 1549738807}
+  PointsText: {fileID: 1072980975}
 --- !u!4 &1119105662
 Transform:
   m_ObjectHideFlags: 0
@@ -3676,7 +3801,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1136779097}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: OnStrenghtButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1136779097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3965,7 +4102,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1272917590}
-  - component: {fileID: 1272917591}
   m_Layer: 5
   m_Name: PRECISION
   m_TagString: Untagged
@@ -3995,20 +4131,6 @@ RectTransform:
   m_AnchoredPosition: {x: -158.4514, y: -97}
   m_SizeDelta: {x: 296.09732, y: 37.194504}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1272917591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1272917589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65a45e1fb336096459bf203406b150f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatsPair
-  Value: {fileID: 1549738807}
-  Button: {fileID: 557937749}
 --- !u!1 &1274058204
 GameObject:
   m_ObjectHideFlags: 0
@@ -4173,6 +4295,7 @@ RectTransform:
   m_Children:
   - {fileID: 8363154}
   - {fileID: 325266124}
+  - {fileID: 1072980977}
   - {fileID: 664482730}
   - {fileID: 547344334}
   - {fileID: 395149580}
@@ -4274,7 +4397,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 641acaf5af8478140878196e414343f6, type: 2}
   m_sharedMaterial: {fileID: -6898459000713504695, guid: 641acaf5af8478140878196e414343f6, type: 2}
@@ -4546,7 +4669,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 641acaf5af8478140878196e414343f6, type: 2}
   m_sharedMaterial: {fileID: -6898459000713504695, guid: 641acaf5af8478140878196e414343f6, type: 2}
@@ -4978,7 +5101,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1586853155}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: OnHealthButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1586853155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6061,7 +6196,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1960600583}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1119105661}
+        m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
+        m_MethodName: OnStaminaButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1960600583
 MonoBehaviour:
   m_ObjectHideFlags: 0
