@@ -1,105 +1,84 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Character", menuName = "RPG System/Character Stats")]
 public class CharacterStats : ScriptableObject
 {
     public string CharacterName;
-    [HideInInspector] public float CurrentHealth;
+
+    [Header("Status")]
+    public float CurrentHealth;
     public float MaxHealth;
-    [HideInInspector] public float CurrentStamina;
+    public float CurrentStamina;
     public float MaxStamina;
+    public bool isBlocking = false;
+
+    [Header("Atrybuty")]
     public int Agility;
     public int Strenght;
     public int Precision;
     public int LevelPoints;
 
-    public void Initialize(string characterName, int levelPoints, float maxHealth, float maxStamina, int agility, int strenght, int precision)
+    // --- INICJALIZACJA ---
+    public void Initialize(string name, int levels, float hp, float sta, int agi, int str, int prec)
     {
-        CharacterName = characterName;
-        LevelPoints = levelPoints;
+        CharacterName = name; LevelPoints = levels;
+        MaxHealth = hp; CurrentHealth = hp;
+        MaxStamina = sta; CurrentStamina = sta;
+        Agility = agi; Strenght = str; Precision = prec;
+        isBlocking = false;
+    }
 
-        MaxHealth = maxHealth;
+    public void Initialize()
+    {
         CurrentHealth = MaxHealth;
-
-        MaxStamina = maxStamina;
         CurrentStamina = MaxStamina;
-
-        Agility = agility;
-        Strenght = strenght;
-        Precision = precision;
+        isBlocking = false;
     }
 
-    
+    // --- LOGIKA WALKI ---
 
-    public void GetDamage(float ammount)
+    public void NewTurnRegen()
     {
-        if(CurrentHealth - ammount>0f)
-            CurrentHealth -= ammount;
-        else
+        // TYLKO RESET BLOKU - BRAK DODAWANIA STAMINY
+        isBlocking = false;
+        Debug.Log($"<color=grey>[TURA]</color> {CharacterName}: Rozpoczyna turę. Blok zdjęty.");
+    }
+
+    public void GetDamage(float amount)
+    {
+        float before = CurrentHealth;
+        CurrentHealth -= amount;
+        if (CurrentHealth < 0) CurrentHealth = 0;
+
+        Debug.Log($"<color=red>[OBRAŻENIA]</color> {CharacterName} traci {amount} HP. ({before} -> {CurrentHealth})");
+    }
+
+    public bool UseStamina(float amount)
+    {
+        if (CurrentStamina >= amount)
         {
-            CurrentHealth = 0f;
-            throw new System.Exception($"{CharacterName} died!");
+            float before = CurrentStamina;
+            CurrentStamina -= amount;
+            Debug.Log($"<color=orange>[KOSZT]</color> {CharacterName} zużył {amount} Stam. ({before} -> {CurrentStamina})");
+            return true;
         }
+
+        Debug.Log($"<color=grey>[BRAK SIŁ]</color> {CharacterName} potrzebuje {amount}, ale ma {CurrentStamina} Stam.");
+        return false;
     }
-    public void UseStamina(float ammount)
+
+    public void RestoreStamina(float amount = 40f)
     {
-        if (CurrentStamina - ammount > 0f)
-            CurrentStamina -= ammount;
-        else
-        {
-            CurrentStamina = 0f;
-            RestoreStamina();
-        }
+        float before = CurrentStamina;
+        CurrentStamina += amount;
+        if (CurrentStamina > MaxStamina) CurrentStamina = MaxStamina;
+        Debug.Log($"<color=green>[SEN]</color> {CharacterName} odnowił {amount} Stam. ({before} -> {CurrentStamina})");
     }
-    public void IncreaseHealth()
-    {
-        if (LevelPoints > 0)
-        {
-            MaxHealth += 10f;
-            LevelPoints--;
-        }
-    }
-    public void IncreaseStamina()
-    {
-        if (LevelPoints > 0)
-        {
-            MaxStamina += 10f;
-            LevelPoints--;
-        }
-    }
-    public void IncreaseAgility()
-    {
-        if (LevelPoints > 0)
-        {
-            Agility++;
-            LevelPoints--;
-        }
-    }
-    public void IncreaseStrenght()
-    {
-        if (LevelPoints > 0)
-        {
-            Strenght++;
-            LevelPoints--;
-        }
-    }
-    public void IncreasePrecision()
-    {
-        if (LevelPoints > 0)
-        {
-            Precision++;
-            LevelPoints--;
-        }
-    }
-    public void RestoreStamina()
-    {
-        if (CurrentStamina + 40f <= MaxStamina)
-            CurrentStamina += 40f;
-        else
-            CurrentStamina = MaxStamina;
-    }
-    public void GetLevelPoints(int ammount)
-    {
-        LevelPoints += ammount;
-    }
+
+    // --- ROZWÓJ POSTACI ---
+    public void IncreaseHealth() { MaxHealth += 10f; CurrentHealth = MaxHealth; }
+    public void IncreaseStamina() { MaxStamina += 10f; CurrentStamina = MaxStamina; }
+    public void IncreaseAgility() { Agility++; }
+    public void IncreaseStrenght() { Strenght++; }
+    public void IncreasePrecision() { Precision++; }
 }
