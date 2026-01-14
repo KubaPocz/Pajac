@@ -12,7 +12,7 @@ public class StatisticsMenuButtons : MonoBehaviour
     public TMP_Text PrecisionPointsText;
     public TMP_Text PointsText;
     private int PointsLeft=10;
-
+    public StartBattleButton startBattleButton;
 
     public void Awake()
     {
@@ -22,12 +22,12 @@ public class StatisticsMenuButtons : MonoBehaviour
         AgilityPointsText.text = Player.Agility.ToString();
         StrenghtPointsText.text = Player.Strenght.ToString();
         PrecisionPointsText.text = Player.Precision.ToString();
-
     }
     public void StartFight()
     {
         CurtainManager.Instance.ChangeScene("Fight", "Statistics", false);
         StatsManager.Instance.ConfirmStatistics();
+        startBattleButton.updateSprite(GameManager.Instance.CurrentEnemy);
     }
 
     public void OnHealthButtonClicked()
