@@ -10,6 +10,9 @@ public class BattleManager : MonoBehaviour
     public EnemyController enemy;
     public ButtonsVisibility buttonsVisibility;
 
+    public Image enemyImage;
+    public Sprite[] enemySprites;
+
     private enum BattleState { None, PlayerTurn, EnemyTurn, Finished }
     private BattleState state = BattleState.None;
 
@@ -22,7 +25,10 @@ public class BattleManager : MonoBehaviour
         public float pHP, pSTA;
         public float eHP, eSTA;
     }
-
+    private void updateEnemySprite(int id)
+    {
+        enemyImage.sprite = enemySprites[id];
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -37,6 +43,7 @@ public class BattleManager : MonoBehaviour
         if (buttonsVisibility == null) buttonsVisibility = FindObjectOfType<ButtonsVisibility>();
 
         Invoke(nameof(StartPlayerTurn), 0.25f);
+        updateEnemySprite(0);
     }
 
     private bool CanRunTurn() =>
