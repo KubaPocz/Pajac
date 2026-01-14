@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -217,5 +218,11 @@ public class BattleManager : MonoBehaviour
         if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.MoveRight();
+    }
+    private void EndBattle()
+    {
+        GameManager.Instance.CurrentEnemy++;
+        updateEnemySprite(GameManager.Instance.CurrentEnemy);
+        CurtainManager.Instance.ChangeScene("Statistics", "Fight", true);
     }
 }
