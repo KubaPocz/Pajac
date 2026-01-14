@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class BattleManager : MonoBehaviour
     public PlayerController player;
     public EnemyController enemy;
     public ButtonsVisibility buttonsVisibility;
+
+    public Image enemyImage;
+    public Sprite[] EnemySprites;
 
     private void Awake()
     {
@@ -19,8 +23,12 @@ public class BattleManager : MonoBehaviour
     {
         // Start walki po chwili
         Invoke("StartPlayerTurn", 1.0f);
+        enemyImage.sprite = EnemySprites[0];
     }
-
+    public void updateEnemySprite(int id)
+    {
+        enemyImage.sprite = EnemySprites[id];
+    }
     public void StartEnemyTurn()
     {
         enemy.Move();
