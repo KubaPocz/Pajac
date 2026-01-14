@@ -119,4 +119,10 @@ public class BattleManager : MonoBehaviour
 
         //reszta
     }
+    private void EndBattle()
+    {
+        GameManager.Instance.CurrentEnemy++;
+        updateEnemySprite(GameManager.Instance.CurrentEnemy);
+        CurtainManager.Instance.ChangeScene("Statistics", "Fight", true);
+    }
 }
