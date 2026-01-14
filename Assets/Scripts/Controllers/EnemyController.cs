@@ -40,7 +40,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         LogAIInitialization();
     }
 
-    // === LOGOWANIE INICJALIZACJI ===
     private void LogAIInitialization()
     {
         Debug.Log("\n╔════════════════════════════════════════════════╗");
@@ -63,7 +62,6 @@ public class EnemyController : MonoBehaviour, CharacterController
     {
         turnCount++;
 
-        // NAGŁÓWEK TURY
         Debug.Log("\n╔════════════════════════════════════════════════╗");
         Debug.Log($"║        >>> TURA WROGA #{turnCount} ({EnemyStats.CharacterName}) <<<        ║");
         Debug.Log("╚════════════════════════════════════════════════╝");
@@ -73,7 +71,6 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         yield return new WaitForSeconds(1.0f);
 
-        // WARUNEK KOŃCA GRY
         if (EnemyStats.CurrentHealth <= 0 || TargetStats.CurrentHealth <= 0)
         {
             Debug.Log("[KONIEC GRY] Walka zakończona - ktoś nie żyje!");
@@ -83,15 +80,11 @@ public class EnemyController : MonoBehaviour, CharacterController
             yield break;
         }
 
-        // RAPORT DYSTANSU I STAMINY
         float dist = Vector3.Distance(transform.position, TargetTransform.position);
         Debug.Log($"\n[OBSERWACJA] Dystans do gracza: {dist:F2}m (Wymagany: {attackRange}m)");
         Debug.Log($"[OBSERWACJA] Stamina wroga: {EnemyStats.CurrentStamina}/{EnemyStats.MaxStamina}");
         Debug.Log($"[OBSERWACJA] HP gracza: {TargetStats.CurrentHealth}/{TargetStats.MaxHealth}");
 
-        // --- DRZEWO DECYZYJNE AI ---
-
-        // 1. CZY WRÓG MA WYSTARCZAJĄCO SIŁY? (< 20 = Sen)
         if (EnemyStats.CurrentStamina < 20)
         {
             Debug.Log("\n[DECYZJA] ❌ Zbyt mało staminy!");
@@ -99,14 +92,12 @@ public class EnemyController : MonoBehaviour, CharacterController
             Debug.Log("         → AKCJA: SEN (Regeneracja +40 STA)");
             PerformSleep();
         }
-        // 2. CZY WRÓG JEST W ZASIĘGU ATAKU?
         else if (dist <= attackRange + 0.5f)
         {
             Debug.Log("\n[DECYZJA] ✓ Gracz w zasięgu ataku!");
             float stamAvailable = EnemyStats.CurrentStamina;
             Debug.Log($"         Dostępna stamina: {stamAvailable}");
 
-            // Wybór ataku bazując na ilości staminy
             if (stamAvailable >= 30 && Random.value > 0.6f)
             {
                 Debug.Log("         → WYBÓR: Ciężki atak (random: 0.6 szansa)");
@@ -126,7 +117,6 @@ public class EnemyController : MonoBehaviour, CharacterController
                 lightAttacksCount++;
             }
         }
-        // 3. CZY GRACZ JE ZA DALEKO? (Ruch w stronę gracza)
         else
         {
             Debug.Log("\n[DECYZJA] ⚠ Gracz za daleko!");
@@ -153,16 +143,16 @@ public class EnemyController : MonoBehaviour, CharacterController
         EndTurn();
     }
 
-    // === SZCZEGÓŁOWY RAPORT Z ATAKU ===
     private void PerformAttack(float cost, float multiplier, string attackName)
     {
+        BattleManager.Instance?.SetLastAction(attackName); // np. "LEKKI ATAK"
+
         totalAttackAttempts++;
 
         Debug.Log($"\n┌─────────────────────────────────────────────────┐");
         Debug.Log($"│ ⚔️  ATAK #{totalAttackAttempts}: {attackName,-30} ⚔️ │");
         Debug.Log($"└─────────────────────────────────────────────────┘");
 
-        // 1. SPRAWDZENIE KOSZTU
         if (!EnemyStats.UseStamina(cost))
         {
             Debug.Log($"[❌ BŁĄD ATAKU] Wróg chciał użyć {attackName}");
@@ -175,7 +165,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log($"[KOSZT] Stamina: -{cost} (Pozostało: {EnemyStats.CurrentStamina})");
         Debug.Log($"[MNOŻNIK OBRAŻEŃ] x{multiplier} | Typ: {attackName}");
 
-        // 2. SZANSA TRAFIENIA (80% + różnica precyzji)
         float hitChance = 80f + (EnemyStats.Precision - TargetStats.Precision);
         float hitRoll = Random.Range(0f, 100f);
         bool isHit = (hitRoll <= hitChance);
@@ -195,7 +184,6 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         totalHits++;
 
-        // 3. UNIK GRACZA (10% + różnica zwinności, min 5, max 50)
         float dodgeChance = 10f + (TargetStats.Agility - EnemyStats.Agility);
         dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
         float dodgeRoll = Random.Range(0f, 100f);
@@ -214,13 +202,11 @@ public class EnemyController : MonoBehaviour, CharacterController
             return;
         }
 
-        // 4. OBLICZENIE OBRAŻEŃ
         float baseDamage = EnemyStats.Strenght * multiplier;
         Debug.Log($"\n[OBRAŻENIA]");
         Debug.Log($"  Siła Wroga: {EnemyStats.Strenght}");
         Debug.Log($"  Bazowe obrażenia: {EnemyStats.Strenght} × {multiplier} = {baseDamage}");
 
-        // 5. BLOK GRACZA
         float finalDamage = baseDamage;
         if (TargetStats.isBlocking)
         {
@@ -241,7 +227,6 @@ public class EnemyController : MonoBehaviour, CharacterController
             Debug.Log($"[BLOK] Gracz NIE BLOKUJE");
         }
 
-        // 6. FINALNE OBRAŻENIA
         Debug.Log($"\n[FINAŁ] ─────────────────────────────────────────────");
         Debug.Log($"       💥 FINALNE OBRAŻENIA: {finalDamage:F1}");
         Debug.Log($"       Typ ataku: {attackName} | Mnożnik: x{multiplier}");
@@ -254,9 +239,10 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log($"             Trafienia: {totalHits} | Pudła: {totalMisses}");
     }
 
-    // === LOGOWANIE RUCHU ===
     private IEnumerator MoveRoutine(float currentDist)
     {
+        BattleManager.Instance?.SetLastAction("Ruch do gracza (-STA)");
+
         Debug.Log($"\n[RUCH] ─────────────────────────────────────────────");
 
         Vector3 start = transform.position;
@@ -286,9 +272,9 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log($"  Nowy dystans: {newDist:F2}m");
     }
 
-    // === LOGOWANIE SNU ===
     private void PerformSleep()
     {
+        BattleManager.Instance?.SetLastAction("Sen (+STA)");
         totalSleepTurns++;
         Debug.Log($"\n[SEN] ─────────────────────────────────────────────");
         Debug.Log($"  Wróg regeneruje siły...");
@@ -298,14 +284,12 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log($"  [STATYSTYKA] Całkowite tury snu: {totalSleepTurns}");
     }
 
-    // === LOGOWANIE KOŃCA TURY ===
     private void EndTurn()
     {
         Debug.Log($"\n╔════════════════════════════════════════════════╗");
         Debug.Log($"║        KONIEC TURY WROGA #{turnCount,-28} ║");
         Debug.Log($"╚════════════════════════════════════════════════╝");
 
-        // PODSUMOWANIE TURY
         Debug.Log($"\n[PODSUMOWANIE TURY]");
         Debug.Log($"  Liczba tur: {turnCount}");
         Debug.Log($"  Akcja: Atak/Ruch/Sen");
@@ -313,7 +297,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log($"  STA Wroga: {EnemyStats.CurrentStamina:F1}/{EnemyStats.MaxStamina}");
         Debug.Log($"  HP Gracza: {TargetStats.CurrentHealth:F1}/{TargetStats.MaxHealth}");
 
-        // STATYSTYKI GLOBALNE
         Debug.Log($"\n[STATYSTYKI GLOBALNE AI]");
         Debug.Log($"  └─ Ataki Lekkie: {lightAttacksCount}");
         Debug.Log($"  └─ Ataki Średnie: {mediumAttacksCount}");
@@ -324,13 +307,9 @@ public class EnemyController : MonoBehaviour, CharacterController
         Debug.Log($"  └─ Ruchy: {totalMovesAttempted}");
         Debug.Log($"  └─ Sny: {totalSleepTurns}");
         Debug.Log($"  └─ Całkowite obrażenia: {totalDamageDealt:F1}");
-
         Debug.Log("\n");
 
         if (BattleManager.Instance != null)
-        {
-            BattleManager.Instance.LogBattleState();
-            BattleManager.Instance.StartPlayerTurn();
-        }
+            BattleManager.Instance.EndEnemyTurn();
     }
 }
