@@ -4,7 +4,6 @@ using UnityEngine;
 public class StatsManager : MonoBehaviour
 {
     public static StatsManager Instance;
-
     private int[] StatisticsToPass = new int[5];
     // Array containing statistics to pass towards CharacterInfo Methods
     // Following this format: 0-Health 1-Stamina 2-Agility 3-Strenght 4-Precision
@@ -23,6 +22,7 @@ public class StatsManager : MonoBehaviour
     {
         Player = GameManager.Instance.Player;
         StatPoints = Player.LevelPoints;
+
     }
 
     public void AddHealthStatistic()
@@ -82,4 +82,5 @@ public class StatsManager : MonoBehaviour
         for (int i = 0; i < StatisticsToPass[3]; i++) Player.IncreaseStrenght();
         for (int i = 0; i < StatisticsToPass[4]; i++) Player.IncreasePrecision();
     }
+
 }
