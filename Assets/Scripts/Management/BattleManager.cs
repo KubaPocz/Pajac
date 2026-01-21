@@ -107,6 +107,10 @@ public class BattleManager : MonoBehaviour
             pBeforeHP: snapshot.pHP, pBeforeSTA: snapshot.pSTA,
             eBeforeHP: snapshot.eHP, eBeforeSTA: snapshot.eSTA
         );
+        if (player.PlayerStats.CurrentHealth <= 0f)
+        { RestartBattle(); ; return; }
+        if(enemy.EnemyStats.CurrentHealth <= 0f)
+        { EndBattle();return; }
 
         StartEnemyTurn();
     }
@@ -225,6 +229,10 @@ public class BattleManager : MonoBehaviour
         //if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.MoveRight();
+    }
+    private void RestartBattle()
+    {
+        CurtainManager.Instance.ChangeScene("Fight", "Fight", true);
     }
     private void EndBattle()
     {
