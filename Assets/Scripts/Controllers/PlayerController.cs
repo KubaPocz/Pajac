@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour, CharacterController
 {
     public CharacterStats PlayerStats;
     public float moveSpeed = 5f;
+    public TMP_Text info;
     private bool isMyTurn = false;
     private EnemyController currentEnemy;
 
@@ -53,6 +56,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         {
             transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 20f);
             Debug.Log("Gracz: Ruch w prawo.");
+            ShowInfo("Moving right");
             EndTurn();
         }
     }
@@ -62,13 +66,16 @@ public class PlayerController : MonoBehaviour, CharacterController
         {
             transform.Translate(Vector3.left * moveSpeed * Time.deltaTime * 20f);
             Debug.Log("Gracz: Ruch w lewo.");
+            ShowInfo("Moving left");
             EndTurn();
         }
     }
     public void Sleep()
     {
         Debug.Log("Gracz: Idzie spać.");
-        PlayerStats.RestoreStamina(40);
+        ShowInfo("Sleeping...");
+
+        PlayerStats.RestoreStamina(60);
         EndTurn();
     }
     public void Block()
@@ -77,14 +84,15 @@ public class PlayerController : MonoBehaviour, CharacterController
         {
             PlayerStats.isBlocking = true;
             Debug.Log("<color=green>Gracz: Postawa obronna (BLOK).</color>");
+            ShowInfo("Defending...");
             EndTurn();
         }
     }
     public void Dodge() { }
 
-    public void AttackLight() { TryPlayerAttack(10, 1.0f, "Lekki"); }
-    public void AttackMedium() { TryPlayerAttack(20, 1.5f, "Średni"); }
-    public void AttackStrong() { TryPlayerAttack(30, 2.0f, "Ciężki"); }
+    public void AttackLight() { TryPlayerAttack(10, 1.0f, "Light"); }
+    public void AttackMedium() { TryPlayerAttack(20, 1.5f, "Medium"); }
+    public void AttackStrong() { TryPlayerAttack(30, 2.0f, "Strong"); }
 
     // --- MATEMATYKA ATAKU (Tu są logi o przeciwniku) ---
     private void TryPlayerAttack(float cost, float multiplier, string name)
@@ -94,7 +102,7 @@ public class PlayerController : MonoBehaviour, CharacterController
 
         CharacterStats target = currentEnemy.EnemyStats;
         Debug.Log($"<color=green>Gracz: Wykonuje {name} atak!</color>");
-
+        ShowInfo($"{name} attack");
         // 1. Czy trafiłeś?
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
         float hitRoll = Random.Range(0f, 100f);
@@ -113,6 +121,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         if (dodgeRoll < dodgeChance)
         {
             Debug.Log($"<color=orange>... PRZECIWNIK ZROBIŁ UNIK! (Szansa uniku: {dodgeChance}%)</color>");
+            ShowInfo("Enemy dodged");
             EndTurn(); return;
         }
 
@@ -134,5 +143,11 @@ public class PlayerController : MonoBehaviour, CharacterController
         Debug.Log($"<color=red>... SUKCES! Przeciwnik otrzymuje {damage} obrażeń.</color>");
         target.GetDamage(damage);
         EndTurn();
+    }
+    private IEnumerator ShowInfo(string infoMessage)
+    {
+        info.text = infoMessage;
+        yield return new WaitForSeconds(1f);
+        info.text = "";
     }
 }
