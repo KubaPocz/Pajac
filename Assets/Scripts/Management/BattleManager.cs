@@ -27,23 +27,24 @@ public class BattleManager : MonoBehaviour
     }
     private void updateEnemySprite(int id)
     {
+        Debug.Log(id);
         enemyImage.sprite = enemySprites[id];
     }
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
         if (player == null) player = FindObjectOfType<PlayerController>();
-        if (enemy == null) enemy = FindObjectOfType<EnemyController>();
+        enemy = FindObjectOfType<EnemyController>();
         if (buttonsVisibility == null) buttonsVisibility = FindObjectOfType<ButtonsVisibility>();
 
+
         Invoke(nameof(StartPlayerTurn), 0.25f);
-        updateEnemySprite(0);
+        updateEnemySprite(GameManager.Instance.CurrentEnemy);
     }
 
     private bool CanRunTurn() =>
@@ -237,7 +238,6 @@ public class BattleManager : MonoBehaviour
     private void EndBattle()
     {
         GameManager.Instance.CurrentEnemy++;
-        updateEnemySprite(GameManager.Instance.CurrentEnemy);
         CurtainManager.Instance.ChangeScene("Statistics", "Fight", true);
     }
 }

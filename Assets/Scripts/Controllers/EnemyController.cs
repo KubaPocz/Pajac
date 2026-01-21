@@ -27,9 +27,9 @@ public class EnemyController : MonoBehaviour, CharacterController
 
     private void Start()
     {
-        if (EnemyStats != null) EnemyStats.Initialize();
+        EnemyStats = GameManager.Instance.Enemies[GameManager.Instance.CurrentEnemy];
+        EnemyStats.Initialize();
         if (TargetStats != null) TargetStats.Initialize();
-
         // Auto-find gracza
         if (TargetTransform == null)
         {

@@ -8,7 +8,7 @@ public class StartBattleButton : MonoBehaviour
     void Start()
     {
         buttonImage = GetComponent<Image>();
-        buttonImage.sprite = FightButtons[0];
+        updateSprite(GameManager.Instance.CurrentEnemy);
     }
 
     public void updateSprite(int id)
