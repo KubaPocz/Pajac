@@ -22,6 +22,7 @@ public class StatsManager : MonoBehaviour
     {
         Player = GameManager.Instance.Player;
         StatPoints = Player.LevelPoints;
+
     }
 
     public void AddHealthStatistic()
