@@ -36,21 +36,6 @@ public class EnemyController : MonoBehaviour, CharacterController
             var p = GameObject.Find("Player");
             if (p != null) TargetTransform = p.transform;
         }
-
-        LogAIInitialization();
-    }
-
-    private void LogAIInitialization()
-    {
-        Debug.Log("\n╔════════════════════════════════════════════════╗");
-        Debug.Log("║         AI WROGA ZAINICJALIZOWANY              ║");
-        Debug.Log("╚════════════════════════════════════════════════╝");
-        Debug.Log($"[STATS] Nazwa wroga: {EnemyStats.CharacterName}");
-        Debug.Log($"[STATS] HP: {EnemyStats.CurrentHealth}/{EnemyStats.MaxHealth}");
-        Debug.Log($"[STATS] Stamina: {EnemyStats.CurrentStamina}/{EnemyStats.MaxStamina}");
-        Debug.Log($"[STATS] Siła: {EnemyStats.Strenght} | Zwinność: {EnemyStats.Agility} | Precyzja: {EnemyStats.Precision}");
-        Debug.Log($"[SETTINGS] Zasięg ataku: {attackRange}m | Prędkość ruchu: {moveSpeed}");
-        Debug.Log("");
     }
 
     public void Move()
@@ -62,18 +47,13 @@ public class EnemyController : MonoBehaviour, CharacterController
     {
         turnCount++;
 
-        Debug.Log("\n╔════════════════════════════════════════════════╗");
-        Debug.Log($"║        >>> TURA WROGA #{turnCount} ({EnemyStats.CharacterName}) <<<        ║");
-        Debug.Log("╚════════════════════════════════════════════════╝");
 
         EnemyStats.NewTurnRegen();
-        Debug.Log($"[POCZĄTEK TURY] Blok zdjęty. HP: {EnemyStats.CurrentHealth}/{EnemyStats.MaxHealth} | STA: {EnemyStats.CurrentStamina}/{EnemyStats.MaxStamina}");
 
         yield return new WaitForSeconds(1.0f);
 
         if (EnemyStats.CurrentHealth <= 0 || TargetStats.CurrentHealth <= 0)
         {
-            Debug.Log("[KONIEC GRY] Walka zakończona - ktoś nie żyje!");
             if (EnemyStats.CurrentHealth <= 0) Debug.Log("  → Wróg POKONANY!");
             if (TargetStats.CurrentHealth <= 0) Debug.Log("  → Gracz POKONANY!");
             EndTurn();
@@ -81,32 +61,22 @@ public class EnemyController : MonoBehaviour, CharacterController
         }
 
         float dist = Vector3.Distance(transform.position, TargetTransform.position);
-        Debug.Log($"\n[OBSERWACJA] Dystans do gracza: {dist:F2}m (Wymagany: {attackRange}m)");
-        Debug.Log($"[OBSERWACJA] Stamina wroga: {EnemyStats.CurrentStamina}/{EnemyStats.MaxStamina}");
-        Debug.Log($"[OBSERWACJA] HP gracza: {TargetStats.CurrentHealth}/{TargetStats.MaxHealth}");
 
         if (EnemyStats.CurrentStamina < 20)
         {
-            Debug.Log("\n[DECYZJA] ❌ Zbyt mało staminy!");
-            Debug.Log($"         Wymagane minimum: 20 | Dostępne: {EnemyStats.CurrentStamina}");
-            Debug.Log("         → AKCJA: SEN (Regeneracja +40 STA)");
             PerformSleep();
         }
         else if (dist <= attackRange + 0.5f)
         {
-            Debug.Log("\n[DECYZJA] ✓ Gracz w zasięgu ataku!");
             float stamAvailable = EnemyStats.CurrentStamina;
-            Debug.Log($"         Dostępna stamina: {stamAvailable}");
 
             if (stamAvailable >= 30 && Random.value > 0.6f)
             {
-                Debug.Log("         → WYBÓR: Ciężki atak (random: 0.6 szansa)");
                 PerformAttack(30, 2.0f, "CIĘŻKI ATAK");
                 heavyAttacksCount++;
             }
             else if (stamAvailable >= 20 && Random.value > 0.4f)
             {
-                Debug.Log("         → WYBÓR: Średni atak (random: 0.4 szansa)");
                 PerformAttack(20, 1.5f, "ŚREDNI ATAK");
                 mediumAttacksCount++;
             }
@@ -119,9 +89,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         }
         else
         {
-            Debug.Log("\n[DECYZJA] ⚠ Gracz za daleko!");
-            Debug.Log($"         Dystans: {dist:F2}m > Zasięg: {attackRange}m");
-            Debug.Log($"         → AKCJA: RUCH NAPRZÓD (Koszt: 5 STA)");
 
             if (EnemyStats.UseStamina(5))
             {
@@ -149,36 +116,22 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         totalAttackAttempts++;
 
-        Debug.Log($"\n┌─────────────────────────────────────────────────┐");
-        Debug.Log($"│ ⚔️  ATAK #{totalAttackAttempts}: {attackName,-30} ⚔️ │");
-        Debug.Log($"└─────────────────────────────────────────────────┘");
 
         if (!EnemyStats.UseStamina(cost))
         {
-            Debug.Log($"[❌ BŁĄD ATAKU] Wróg chciał użyć {attackName}");
-            Debug.Log($"              Wymagane: {cost} STA | Dostępne: {EnemyStats.CurrentStamina}");
-            Debug.Log("              → Atak ANULOWANY! Wróg idzie spać.");
             PerformSleep();
             return;
         }
 
-        Debug.Log($"[KOSZT] Stamina: -{cost} (Pozostało: {EnemyStats.CurrentStamina})");
-        Debug.Log($"[MNOŻNIK OBRAŻEŃ] x{multiplier} | Typ: {attackName}");
 
         float hitChance = 80f + (EnemyStats.Precision - TargetStats.Precision);
         float hitRoll = Random.Range(0f, 100f);
         bool isHit = (hitRoll <= hitChance);
 
-        Debug.Log($"\n[TRAFIENIE]");
-        Debug.Log($"  Siła Wroga: {EnemyStats.Precision} | Obrona Gracza: {TargetStats.Precision}");
-        Debug.Log($"  Szansa trafienia: {hitChance:F1}%");
-        Debug.Log($"  Wylosowano: {hitRoll:F2}%");
-        Debug.Log($"  → WYNIK: {(isHit ? "✓ TRAFIENIE" : "✗ PUDŁO")}");
 
         if (!isHit)
         {
             totalMisses++;
-            Debug.Log($"\n[STATYSTYKA] Pudła wroga: {totalMisses}");
             return;
         }
 
@@ -189,12 +142,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         float dodgeRoll = Random.Range(0f, 100f);
         bool isDodged = (dodgeRoll < dodgeChance);
 
-        Debug.Log($"\n[SZANSA UNIKU GRACZA]");
-        Debug.Log($"  Zwinność Gracza: {TargetStats.Agility} | Zwinność Wroga: {EnemyStats.Agility}");
-        Debug.Log($"  Szansa uniku gracza: {dodgeChance:F1}%");
-        Debug.Log($"  Wylosowano: {dodgeRoll:F2}%");
-        Debug.Log($"  → WYNIK: {(isDodged ? "✓✓✓ GRACZ UNIKNĄŁ ATAKU! ✓✓✓" : "✗ UNIK NIEUDANY - TRAFIA W CEL!")}");
-
         if (isDodged)
         {
             totalDodgesAgainstPlayer++;
@@ -203,9 +150,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         }
 
         float baseDamage = EnemyStats.Strenght * multiplier;
-        Debug.Log($"\n[OBRAŻENIA]");
-        Debug.Log($"  Siła Wroga: {EnemyStats.Strenght}");
-        Debug.Log($"  Bazowe obrażenia: {EnemyStats.Strenght} × {multiplier} = {baseDamage}");
 
         float finalDamage = baseDamage;
         if (TargetStats.isBlocking)
@@ -215,28 +159,14 @@ public class EnemyController : MonoBehaviour, CharacterController
 
             float reductionAmount = baseDamage * (reductionPercent / 100f);
             finalDamage -= reductionAmount;
-
-            Debug.Log($"\n[BLOK GRACZA] 🛡");
-            Debug.Log($"  Zwinność gracza: {TargetStats.Agility}");
-            Debug.Log($"  Procent redukcji: {reductionPercent:F1}%");
-            Debug.Log($"  Zmniejszone obrażenia: {baseDamage} - {reductionAmount:F1} = {finalDamage:F1}");
             totalBlocksByPlayer++;
         }
         else
         {
             Debug.Log($"[BLOK] Gracz NIE BLOKUJE");
         }
-
-        Debug.Log($"\n[FINAŁ] ─────────────────────────────────────────────");
-        Debug.Log($"       💥 FINALNE OBRAŻENIA: {finalDamage:F1}");
-        Debug.Log($"       Typ ataku: {attackName} | Mnożnik: x{multiplier}");
-        Debug.Log($"       HP Gracza: {TargetStats.CurrentHealth:F1} → {TargetStats.CurrentHealth - finalDamage:F1}");
-
         TargetStats.GetDamage(finalDamage);
         totalDamageDealt += finalDamage;
-
-        Debug.Log($"\n[STATYSTYKA] Całkowite obrażenia wroga: {totalDamageDealt:F1}");
-        Debug.Log($"             Trafienia: {totalHits} | Pudła: {totalMisses}");
     }
 
     private IEnumerator MoveRoutine(float currentDist)
@@ -250,10 +180,6 @@ public class EnemyController : MonoBehaviour, CharacterController
         Vector3 dir = (target - start).normalized;
         float travel = Mathf.Min(currentDist - attackRange, moveSpeed);
 
-        Debug.Log($"  Pozycja początkowa: ({start.x:F2}, {start.y:F2})");
-        Debug.Log($"  Pozycja gracza: ({target.x:F2}, {target.y:F2})");
-        Debug.Log($"  Kierunek: {dir.ToString("F2")}");
-        Debug.Log($"  Dystans do pokonania: {travel:F2}m");
 
         if (travel > 0.1f)
         {
@@ -276,39 +202,11 @@ public class EnemyController : MonoBehaviour, CharacterController
     {
         BattleManager.Instance?.SetLastAction("Sen (+STA)");
         totalSleepTurns++;
-        Debug.Log($"\n[SEN] ─────────────────────────────────────────────");
-        Debug.Log($"  Wróg regeneruje siły...");
-        Debug.Log($"  Stamina przed: {EnemyStats.CurrentStamina}");
         EnemyStats.RestoreStamina(40);
-        Debug.Log($"  Stamina po: {EnemyStats.CurrentStamina}");
-        Debug.Log($"  [STATYSTYKA] Całkowite tury snu: {totalSleepTurns}");
     }
 
     private void EndTurn()
     {
-        Debug.Log($"\n╔════════════════════════════════════════════════╗");
-        Debug.Log($"║        KONIEC TURY WROGA #{turnCount,-28} ║");
-        Debug.Log($"╚════════════════════════════════════════════════╝");
-
-        Debug.Log($"\n[PODSUMOWANIE TURY]");
-        Debug.Log($"  Liczba tur: {turnCount}");
-        Debug.Log($"  Akcja: Atak/Ruch/Sen");
-        Debug.Log($"  HP Wroga: {EnemyStats.CurrentHealth:F1}/{EnemyStats.MaxHealth}");
-        Debug.Log($"  STA Wroga: {EnemyStats.CurrentStamina:F1}/{EnemyStats.MaxStamina}");
-        Debug.Log($"  HP Gracza: {TargetStats.CurrentHealth:F1}/{TargetStats.MaxHealth}");
-
-        Debug.Log($"\n[STATYSTYKI GLOBALNE AI]");
-        Debug.Log($"  └─ Ataki Lekkie: {lightAttacksCount}");
-        Debug.Log($"  └─ Ataki Średnie: {mediumAttacksCount}");
-        Debug.Log($"  └─ Ataki Ciężkie: {heavyAttacksCount}");
-        Debug.Log($"  └─ Razem ataków: {totalAttackAttempts} (Trafienia: {totalHits}, Pudła: {totalMisses})");
-        Debug.Log($"  └─ Celne Ataki: {totalHits}/{totalAttackAttempts} ({(totalAttackAttempts > 0 ? (totalHits * 100f / totalAttackAttempts) : 0):F1}%)");
-        Debug.Log($"  └─ Obrony: Uniki gracza: {totalDodgesAgainstPlayer}, Bloki: {totalBlocksByPlayer}");
-        Debug.Log($"  └─ Ruchy: {totalMovesAttempted}");
-        Debug.Log($"  └─ Sny: {totalSleepTurns}");
-        Debug.Log($"  └─ Całkowite obrażenia: {totalDamageDealt:F1}");
-        Debug.Log("\n");
-
         if (BattleManager.Instance != null)
             BattleManager.Instance.EndEnemyTurn();
     }

@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour, CharacterController
     {
         if (PlayerStats.UseStamina(5))
         {
-            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 20f);
+            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 200f);
             Debug.Log("Gracz: Ruch w prawo.");
             ShowInfo("Moving right");
             EndTurn();
@@ -98,35 +98,13 @@ public class PlayerController : MonoBehaviour, CharacterController
 
     public void MoveLeft()
     {
-        if (!CanAct()) return;
-        if (!PlayerStats.UseStamina(moveStaminaCost)) return;
-
-        actionLocked = true;
-        StartCoroutine(MoveRoutine(Vector3.left * moveStep));
-        Report("Ruch w lewo (-STA)");
-
-    }
-
-    private IEnumerator MoveRoutine(Vector3 delta)
-    {
-        Debug.Log($"Gracz: Ruch {(delta.x > 0 ? "w prawo" : "w lewo")}.");
-
-        Vector3 start = transform.position;
-        Vector3 end = start + delta;
-
-        float t = 0f;
-        while (t < 1f)
+        if (PlayerStats.UseStamina(5))
         {
-            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime * 20f);
-            Debug.Log("Gracz: Ruch w lewo.");
-            ShowInfo("Moving left");
+            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 200f);
+            Debug.Log("Gracz: Ruch w prawo.");
+            ShowInfo("Moving right");
             EndTurn();
         }
-
-        transform.position = end;
-
-        actionLocked = false;
-        EndTurn();
     }
 
     public void Sleep()
@@ -154,13 +132,6 @@ public class PlayerController : MonoBehaviour, CharacterController
     public void AttackLight() { TryPlayerAttack(10, 1.0f, "Light"); }
     public void AttackMedium() { TryPlayerAttack(20, 1.5f, "Medium"); }
     public void AttackStrong() { TryPlayerAttack(30, 2.0f, "Strong"); }
-
-    public void AttackStrong()
-    {
-        if (!CanAct()) return;
-        TryPlayerAttack(strongCost, 2.0f, "Ciężki");
-        Report("Atak ciężki (-STA)");
-    }
 
     // --- MATEMATYKA ATAKU ---
     private void TryPlayerAttack(float cost, float multiplier, string name)

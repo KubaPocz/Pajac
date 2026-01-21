@@ -222,7 +222,7 @@ public class BattleManager : MonoBehaviour
 
     public void MoveRightButton()
     {
-        if (state != BattleState.PlayerTurn) return;
+        //if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.MoveRight();
     }
