@@ -1,22 +1,13 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, CharacterController
 {
     [Header("Stats")]
     public CharacterStats PlayerStats;
-
-    [Header("Movement")]
-    public float moveStep = 120f;      // ile jednostek UI/świata przesunąć za 1 akcję
-    public float moveDuration = 0.15f; // czas animacji ruchu
-    public float moveStaminaCost = 5f;
-
-    [Header("Combat costs")]
-    public float lightCost = 10f;
-    public float mediumCost = 20f;
-    public float strongCost = 30f;
-    public float blockCost = 15f;
-
+    public float moveSpeed = 5f;
+    public TMP_Text info;
     private bool isMyTurn = false;
     private bool actionLocked = false;
     private EnemyController currentEnemy;
@@ -96,13 +87,13 @@ public class PlayerController : MonoBehaviour, CharacterController
 
     public void MoveRight()
     {
-        if (!CanAct()) return;
-        if (!PlayerStats.UseStamina(moveStaminaCost)) return;
-
-        actionLocked = true;
-        StartCoroutine(MoveRoutine(Vector3.right * moveStep));
-        Report("Ruch w prawo (-STA)");
-
+        if (PlayerStats.UseStamina(5))
+        {
+            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 20f);
+            Debug.Log("Gracz: Ruch w prawo.");
+            ShowInfo("Moving right");
+            EndTurn();
+        }
     }
 
     public void MoveLeft()
@@ -126,9 +117,10 @@ public class PlayerController : MonoBehaviour, CharacterController
         float t = 0f;
         while (t < 1f)
         {
-            t += Time.deltaTime / Mathf.Max(0.01f, moveDuration);
-            transform.position = Vector3.Lerp(start, end, t);
-            yield return null;
+            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime * 20f);
+            Debug.Log("Gracz: Ruch w lewo.");
+            ShowInfo("Moving left");
+            EndTurn();
         }
 
         transform.position = end;
@@ -142,41 +134,26 @@ public class PlayerController : MonoBehaviour, CharacterController
         if (!CanAct()) return;
 
         Debug.Log("Gracz: Idzie spać.");
-        PlayerStats.RestoreStamina(40);
-        Report("Sen (+STA)");
+        ShowInfo("Sleeping...");
+
+        PlayerStats.RestoreStamina(60);
         EndTurn();
     }
 
     public void Block()
     {
-        if (!CanAct()) return;
-        if (!PlayerStats.UseStamina(blockCost)) return;
-
-        PlayerStats.isBlocking = true;
-        Debug.Log("<color=green>Gracz: Postawa obronna (BLOK).</color>");
-        Report("Blok");
-
-        EndTurn();
+        if (PlayerStats.UseStamina(15))
+        {
+            PlayerStats.isBlocking = true;
+            Debug.Log("<color=green>Gracz: Postawa obronna (BLOK).</color>");
+            ShowInfo("Defending...");
+            EndTurn();
+        }
     }
 
-    public void Dodge()
-    {
-        // zostawione jako placeholder
-    }
-
-    public void AttackLight()
-    {
-        if (!CanAct()) return;
-        TryPlayerAttack(lightCost, 1.0f, "Lekki");
-        Report("Atak lekki (-STA)");
-    }
-
-    public void AttackMedium()
-    {
-        if (!CanAct()) return;
-        TryPlayerAttack(mediumCost, 1.5f, "Średni");
-        Report("Atak średni (-STA)");
-    }
+    public void AttackLight() { TryPlayerAttack(10, 1.0f, "Light"); }
+    public void AttackMedium() { TryPlayerAttack(20, 1.5f, "Medium"); }
+    public void AttackStrong() { TryPlayerAttack(30, 2.0f, "Strong"); }
 
     public void AttackStrong()
     {
@@ -198,8 +175,8 @@ public class PlayerController : MonoBehaviour, CharacterController
         }
 
         Debug.Log($"<color=green>Gracz: Wykonuje {name} atak!</color>");
-
-        // 1. Trafienie
+        ShowInfo($"{name} attack");
+        // 1. Czy trafiłeś?
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
         float hitRoll = Random.Range(0f, 100f);
 
@@ -218,8 +195,8 @@ public class PlayerController : MonoBehaviour, CharacterController
         if (dodgeRoll < dodgeChance)
         {
             Debug.Log($"<color=orange>... PRZECIWNIK ZROBIŁ UNIK! (Szansa uniku: {dodgeChance}%)</color>");
-            EndTurn();
-            return;
+            ShowInfo("Enemy dodged");
+            EndTurn(); return;
         }
 
         // 3. DMG
@@ -242,10 +219,10 @@ public class PlayerController : MonoBehaviour, CharacterController
 
         EndTurn();
     }
-    private void Report(string label)
+    private IEnumerator ShowInfo(string infoMessage)
     {
-        if (BattleManager.Instance != null)
-            BattleManager.Instance.SetLastAction(label);
+        info.text = infoMessage;
+        yield return new WaitForSeconds(1f);
+        info.text = "";
     }
-
 }
