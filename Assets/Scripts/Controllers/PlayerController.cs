@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour, CharacterController
 {
     [Header("Stats")]
     public CharacterStats PlayerStats;
-    public float moveSpeed = 5f;
+    public float moveSpeed = 200f;
     public TMP_Text info;
     private bool isMyTurn = false;
     private bool actionLocked = false;
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         {
             transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 200f);
             Debug.Log("Gracz: Ruch w prawo.");
-            ShowInfo("Moving right");
+            StartCoroutine(ShowInfo("Moving right"));
             EndTurn();
         }
     }
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         {
             transform.Translate(Vector3.right * moveSpeed * Time.deltaTime * 200f);
             Debug.Log("Gracz: Ruch w prawo.");
-            ShowInfo("Moving right");
+            StartCoroutine(ShowInfo("Moving right"));
             EndTurn();
         }
     }
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         if (!CanAct()) return;
 
         Debug.Log("Gracz: Idzie spać.");
-        ShowInfo("Sleeping...");
+        StartCoroutine(ShowInfo("Sleeping..."));
 
         PlayerStats.RestoreStamina(60);
         EndTurn();
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         {
             PlayerStats.isBlocking = true;
             Debug.Log("<color=green>Gracz: Postawa obronna (BLOK).</color>");
-            ShowInfo("Defending...");
+            StartCoroutine(ShowInfo("Defending..."));
             EndTurn();
         }
     }
@@ -146,7 +146,8 @@ public class PlayerController : MonoBehaviour, CharacterController
         }
 
         Debug.Log($"<color=green>Gracz: Wykonuje {name} atak!</color>");
-        ShowInfo($"{name} attack");
+        StartCoroutine(ShowInfo($"{name} attack"));
+
         // 1. Czy trafiłeś?
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
         float hitRoll = Random.Range(0f, 100f);
@@ -166,7 +167,7 @@ public class PlayerController : MonoBehaviour, CharacterController
         if (dodgeRoll < dodgeChance)
         {
             Debug.Log($"<color=orange>... PRZECIWNIK ZROBIŁ UNIK! (Szansa uniku: {dodgeChance}%)</color>");
-            ShowInfo("Enemy dodged");
+            StartCoroutine(ShowInfo("Enemy dodged"));
             EndTurn(); return;
         }
 
@@ -192,6 +193,7 @@ public class PlayerController : MonoBehaviour, CharacterController
     }
     private IEnumerator ShowInfo(string infoMessage)
     {
+        Debug.Log(info.text);
         info.text = infoMessage;
         yield return new WaitForSeconds(1f);
         info.text = "";

@@ -1022,7 +1022,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aa34f609fdf24a440a364691bfb1937d, type: 2}
   m_sharedMaterial: {fileID: 1823951730518968333, guid: aa34f609fdf24a440a364691bfb1937d, type: 2}
@@ -1265,7 +1265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   PlayerStats: {fileID: 11400000, guid: 9d7769319b1c0db44b3a615aa85e3bed, type: 2}
-  moveSpeed: 5
+  moveSpeed: 200
   info: {fileID: 537314398}
 --- !u!114 &701522826
 MonoBehaviour:
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd793b2e7cb9d6f4a91bd9e2bd293c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  EnemyStats: {fileID: 11400000, guid: 54d9f92d8f5f9734cae6ddc7f8e418e7, type: 2}
+  EnemyStats: {fileID: 11400000, guid: 11e69a83608b01e4f9f5fbd7755aa400, type: 2}
   TargetStats: {fileID: 11400000, guid: 9d7769319b1c0db44b3a615aa85e3bed, type: 2}
   TargetTransform: {fileID: 0}
   attackRange: 200
