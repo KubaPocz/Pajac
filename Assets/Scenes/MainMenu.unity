@@ -1489,6 +1489,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: uiClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: musicClips.Array.size
       value: 1
       objectReference: {fileID: 0}
