@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/// Efekt odskoku przy trafieniu (do tyłu i powrót).
 public class HitHop : MonoBehaviour
 {
-    public float hopDistance = 40f;   // jak daleko odskakuje
-    public float hopTime = 0.15f;    // czas fazy odskoku
-    public float returnTime = 0.15f; // czas powrotu
+    public float hopDistance = 40f;
+    public float hopTime = 0.15f;
+    public float returnTime = 0.15f;
 
     private bool isPlaying = false;
 
-    /// <summary>
-    /// direction = +1f (w prawo), -1f (w lewo) względem osi X.
-    /// </summary>
     public void Play(float direction)
     {
         if (!isPlaying)

@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour, CharacterController
     public float minDistanceToEnemy = 100f;
     public TMP_Text info;
 
+    [Header("Weapon")]
+    public GameObject staffPrefab;          // PREFAB laski (z PlayerStaffProjectile)
+
     private bool isMyTurn = false;
     private bool actionLocked = false;
 
@@ -126,12 +129,14 @@ public class PlayerController : MonoBehaviour, CharacterController
 
         if (distanceX < minDistanceToEnemy)
         {
-            Debug.Log("Ruch zablokowany – za blisko przeciwnika.");
+            Debug.Log("Ruch zablokowany: za blisko przeciwnika.");
             return false;
         }
 
         return true;
     }
+
+    // --- RESZTA AKCJI ---
 
     public void Sleep()
     {
@@ -173,6 +178,17 @@ public class PlayerController : MonoBehaviour, CharacterController
         Debug.Log($"Gracz: Wykonuje {name} atak!");
         StartCoroutine(ShowInfo($"{name} attack"));
 
+        // LASKA – swing przy graczu: prefab jako dziecko playera
+        if (staffPrefab != null)
+        {
+            GameObject staff = Instantiate(staffPrefab, transform.position, Quaternion.identity, transform);
+            PlayerStaffProjectile proj = staff.GetComponent<PlayerStaffProjectile>();
+            if (proj != null)
+            {
+                proj.Init(transform);
+            }
+        }
+
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
         float hitRoll = Random.Range(0f, 100f);
         if (hitRoll > hitChance)
@@ -208,8 +224,8 @@ public class PlayerController : MonoBehaviour, CharacterController
         Debug.Log($"... SUKCES! Przeciwnik otrzymuje {damage} obrażeń.");
         target.GetDamage(damage);
 
-        // Wróg jest po LEWEJ → odskakuje w PRAWO (od gracza)
-        var hop = currentEnemy.GetComponent<HitHop>();
+        // jeśli nadal używasz HitHop:
+        HitHop hop = currentEnemy.GetComponent<HitHop>();
         if (hop != null)
         {
             hop.Play(+1f);

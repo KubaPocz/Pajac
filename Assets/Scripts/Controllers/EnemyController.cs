@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour, CharacterController
     public float attackRange = 2.0f;
     public float moveSpeed = 4.0f;
 
-    [Header("Banana projectile (dla Monkey)")]
+    [Header("Banana projectile (tylko dla Monkey)")]
     public GameObject bananaPrefab;
     public Transform bananaSpawnPoint;
 
@@ -31,13 +31,8 @@ public class EnemyController : MonoBehaviour, CharacterController
 
     private void Start()
     {
-        if (EnemyStats == null && GameManager.Instance != null)
-        {
-            EnemyStats = GameManager.Instance.Enemies[GameManager.Instance.CurrentEnemy];
-        }
-
-        if (EnemyStats != null)
-            EnemyStats.Initialize();
+        EnemyStats = GameManager.Instance.Enemies[GameManager.Instance.CurrentEnemy];
+        EnemyStats.Initialize();
 
         if (TargetStats != null)
             TargetStats.Initialize();
@@ -63,8 +58,8 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         if (EnemyStats.CurrentHealth <= 0 || TargetStats.CurrentHealth <= 0)
         {
-            if (EnemyStats.CurrentHealth <= 0) Debug.Log("Wróg POKONANY!");
-            if (TargetStats.CurrentHealth <= 0) Debug.Log("Gracz POKONANY!");
+            if (EnemyStats.CurrentHealth <= 0) Debug.Log(" → Wróg POKONANY!");
+            if (TargetStats.CurrentHealth <= 0) Debug.Log(" → Gracz POKONANY!");
             EndTurn();
             yield break;
         }
@@ -91,6 +86,7 @@ public class EnemyController : MonoBehaviour, CharacterController
             }
             else
             {
+                Debug.Log(" → WYBÓR: Lekki atak (domyślnie)");
                 PerformAttack(10, 1.0f, "LEKKI ATAK");
                 lightAttacksCount++;
             }
@@ -100,10 +96,15 @@ public class EnemyController : MonoBehaviour, CharacterController
             if (EnemyStats.UseStamina(5))
             {
                 totalMovesAttempted++;
+                Debug.Log("\n[RUCH] 🏃 WRÓG RUSZA SIĘ DO PRZODU!");
+                Debug.Log($" Koszt: 5 STA | Pozostało: {EnemyStats.CurrentStamina}");
                 yield return StartCoroutine(MoveRoutine(dist));
             }
             else
             {
+                Debug.Log($"[RUCH] ❌ BRAK STAMINY NA RUCH!");
+                Debug.Log($" Wymagane: 5 | Dostępne: {EnemyStats.CurrentStamina}");
+                Debug.Log(" → AKCJA ZASTĘPCZA: SEN");
                 PerformSleep();
             }
         }
@@ -123,6 +124,7 @@ public class EnemyController : MonoBehaviour, CharacterController
             return;
         }
 
+        // 1. Trafienie
         float hitChance = 80f + (EnemyStats.Precision - TargetStats.Precision);
         float hitRoll = Random.Range(0f, 100f);
         bool isHit = (hitRoll <= hitChance);
@@ -134,6 +136,7 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         totalHits++;
 
+        // 2. Unik gracza
         float dodgeChance = 10f + (TargetStats.Agility - EnemyStats.Agility);
         dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
         float dodgeRoll = Random.Range(0f, 100f);
@@ -141,14 +144,33 @@ public class EnemyController : MonoBehaviour, CharacterController
         if (isDodged)
         {
             totalDodgesAgainstPlayer++;
+            Debug.Log($"\n[STATYSTYKA] Udane uniki gracza w całej walce: {totalDodgesAgainstPlayer}");
             return;
         }
 
-        if (EnemyStats.CharacterName == "Monkey" || EnemyStats.CharacterName == "Małpa")
+        // 3. Monkey → banan, inni → melee knockback
+        bool isMonkey = EnemyStats != null && EnemyStats.CharacterName == "Monkey";
+
+        if (isMonkey)
         {
+            // Monkey: banan leci i sam zrobi knockback gracza po trafieniu
             FireBanana();
         }
+        else
+        {
+            // inni enemy: zwykły atak wręcz → od razu knockback gracza
+            if (TargetTransform != null)
+            {
+                HitHop hop = TargetTransform.GetComponent<HitHop>();
+                if (hop != null)
+                {
+                    // enemy jest po LEWEJ, gracz po PRAWEJ → knockback gracza w LEWO
+                    hop.Play(-1f);
+                }
+            }
+        }
 
+        // 4. Obrażenia
         float baseDamage = EnemyStats.Strenght * multiplier;
         float finalDamage = baseDamage;
 
@@ -161,11 +183,13 @@ public class EnemyController : MonoBehaviour, CharacterController
             finalDamage -= reductionAmount;
             totalBlocksByPlayer++;
         }
+        else
+        {
+            Debug.Log("[BLOK] Gracz NIE BLOKUJE");
+        }
 
         TargetStats.GetDamage(finalDamage);
         totalDamageDealt += finalDamage;
-
-        // ODRZUT GRACZA robi BananaProjectile, przeciwnik odskakuje tylko przy ciosie od gracza (w PlayerController).
     }
 
     private void FireBanana()
@@ -193,6 +217,7 @@ public class EnemyController : MonoBehaviour, CharacterController
     {
         BattleManager.Instance?.SetLastAction("Ruch do gracza (-STA)");
 
+        Debug.Log("\n[RUCH] ─────────────────────────────────────────────");
         Vector3 start = transform.position;
         Vector3 target = TargetTransform.position;
         Vector3 dir = (target - start).normalized;
@@ -200,16 +225,20 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         if (travel > 0.1f)
         {
-            float t = 0f;
+            float t = 0;
             while (t < 1f)
             {
-                t += Time.deltaTime / 0.3f;
                 transform.position = Vector3.Lerp(start, start + dir * travel, t);
+                t += Time.deltaTime;
                 yield return null;
             }
 
             transform.position = start + dir * travel;
         }
+
+        Debug.Log($" Nowa pozycja: ({transform.position.x:F2}, {transform.position.y:F2})");
+        float newDist = Vector3.Distance(transform.position, TargetTransform.position);
+        Debug.Log($" Nowy dystans: {newDist:F2}m");
     }
 
     private void PerformSleep()
