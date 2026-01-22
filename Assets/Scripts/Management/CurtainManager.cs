@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using Unity.VisualScripting;
 
+
 public class CurtainManager : MonoBehaviour
 {
     public static CurtainManager Instance;
@@ -53,6 +54,7 @@ public class CurtainManager : MonoBehaviour
         yield return StartCoroutine(ChangeSceneWithCurtainRoutine(sceneToLoad, sceneToUnload));
         // 4. Otwieranie zas³ony po za³adowaniu nowej sceny
         yield return StartCoroutine(OpenCurtainRoutine());
+        
     }
 
     private IEnumerator ChangeSceneWithCurtainRoutine(string sceneToLoad, string sceneToUnload)
@@ -92,6 +94,7 @@ public class CurtainManager : MonoBehaviour
     private IEnumerator PlayCurtainClosingSequence()
     {
         // 2. Odtwarzanie sekwencji obrazów (zamykanie zas³ony)
+        AudioManager.PlayCurtainCloseSound(); //zagranie dzwi?ku zamykanej zas?ony
         for (int i = 0; i < closingCurtainFrames.Length; i++)
         {
             curtainImageDisplay.texture = closingCurtainFrames[i];
@@ -102,6 +105,7 @@ public class CurtainManager : MonoBehaviour
     private IEnumerator OpenCurtainRoutine()
     {
         // 4. Otwieranie zas³ony po za³adowaniu nowej sceny
+        AudioManager.PlayCurtainOpenSound();//zagranie dzwi?ku otwieranej zas?ony
         for (int i = 0; i < openingCurtainFrames.Length; i++)
         {
             curtainImageDisplay.texture = openingCurtainFrames[i];
