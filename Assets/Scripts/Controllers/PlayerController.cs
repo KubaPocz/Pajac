@@ -6,12 +6,14 @@ public class PlayerController : MonoBehaviour, CharacterController
 {
     [Header("Stats")]
     public CharacterStats PlayerStats;
-    public float moveStep = 200f;               // jeden „krok” w turze
-    public float minDistanceToEnemy = 100f;   // minimalny dystans po osi X
+
+    public float moveStep = 200f;
+    public float minDistanceToEnemy = 100f;
     public TMP_Text info;
 
     private bool isMyTurn = false;
     private bool actionLocked = false;
+
     private EnemyController currentEnemy;
 
     private void Start()
@@ -114,27 +116,22 @@ public class PlayerController : MonoBehaviour, CharacterController
         EndTurn();
     }
 
-    // Sprawdzamy dystans po osi X do przeciwnika
     private bool CanMoveTo(Vector3 targetPos)
     {
         if (currentEnemy == null) return true;
 
         float enemyX = currentEnemy.transform.position.x;
         float targetX = targetPos.x;
-
         float distanceX = Mathf.Abs(enemyX - targetX);
 
-        // jeśli po ruchu byłbyś bliżej niż minDistanceToEnemy – blokujemy
         if (distanceX < minDistanceToEnemy)
         {
-            Debug.Log("Ruch zablokowany: za blisko przeciwnika.");
+            Debug.Log("Ruch zablokowany – za blisko przeciwnika.");
             return false;
         }
 
         return true;
     }
-
-    // --- RESZTA AKCJI ---
 
     public void Sleep()
     {
@@ -142,7 +139,6 @@ public class PlayerController : MonoBehaviour, CharacterController
 
         Debug.Log("Gracz: Idzie spać.");
         StartCoroutine(ShowInfo("Sleeping..."));
-
         PlayerStats.RestoreStamina(60);
         EndTurn();
     }
@@ -188,7 +184,6 @@ public class PlayerController : MonoBehaviour, CharacterController
 
         float dodgeChance = 10f + (target.Agility - PlayerStats.Agility);
         dodgeChance = Mathf.Clamp(dodgeChance, 5f, 50f);
-
         float dodgeRoll = Random.Range(0f, 100f);
         if (dodgeRoll < dodgeChance)
         {
@@ -207,19 +202,27 @@ public class PlayerController : MonoBehaviour, CharacterController
 
             float reductionAmount = damage * (reductionPercent / 100f);
             damage -= reductionAmount;
-
             Debug.Log($"... PRZECIWNIK BLOKUJE! Zredukował obrażenia o {reductionPercent}% (-{reductionAmount} dmg).");
         }
 
         Debug.Log($"... SUKCES! Przeciwnik otrzymuje {damage} obrażeń.");
         target.GetDamage(damage);
+
+        // Wróg jest po LEWEJ → odskakuje w PRAWO (od gracza)
+        var hop = currentEnemy.GetComponent<HitHop>();
+        if (hop != null)
+        {
+            hop.Play(+1f);
+        }
+
         EndTurn();
     }
 
     private IEnumerator SmoothMove(Vector3 from, Vector3 to, float duration)
     {
-        float t = 0f;
+        actionLocked = true;
 
+        float t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime / duration;
@@ -228,13 +231,18 @@ public class PlayerController : MonoBehaviour, CharacterController
         }
 
         transform.position = to;
+        actionLocked = false;
     }
 
     private IEnumerator ShowInfo(string infoMessage)
     {
-        Debug.Log(info.text);
-        info.text = infoMessage;
+        if (info != null)
+            info.text = infoMessage;
+
+        Debug.Log(infoMessage);
         yield return new WaitForSeconds(1f);
-        info.text = "";
+
+        if (info != null)
+            info.text = "";
     }
 }
