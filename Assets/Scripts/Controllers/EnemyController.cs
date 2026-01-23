@@ -11,9 +11,12 @@ public class EnemyController : MonoBehaviour, CharacterController
     public float attackRange = 2.0f;
     public float moveSpeed = 4.0f;
 
-    [Header("Banana projectile (tylko dla Monkey)")]
-    public GameObject bananaPrefab;
+    [Header("Projectiles")]
+    public GameObject bananaPrefab;      // dla Monkey
     public Transform bananaSpawnPoint;
+
+    public GameObject ballPrefab;        // dla Elephant
+    public Transform ballSpawnPoint;
 
     // === STATYSTYKI AI DO LOGOWANIA ===
     private int turnCount = 0;
@@ -96,14 +99,13 @@ public class EnemyController : MonoBehaviour, CharacterController
             if (EnemyStats.UseStamina(5))
             {
                 totalMovesAttempted++;
-                Debug.Log("\n[RUCH] 🏃 WRÓG RUSZA SIĘ DO PRZODU!");
+                Debug.Log("\n[RUCH] WRÓG RUSZA SIĘ DO PRZODU!");
                 Debug.Log($" Koszt: 5 STA | Pozostało: {EnemyStats.CurrentStamina}");
                 yield return StartCoroutine(MoveRoutine(dist));
             }
             else
             {
-                Debug.Log($"[RUCH] ❌ BRAK STAMINY NA RUCH!");
-                Debug.Log($" Wymagane: 5 | Dostępne: {EnemyStats.CurrentStamina}");
+                Debug.Log($"[RUCH] BRAK STAMINY NA RUCH! Wymagane: 5 | Dostępne: {EnemyStats.CurrentStamina}");
                 Debug.Log(" → AKCJA ZASTĘPCZA: SEN");
                 PerformSleep();
             }
@@ -148,26 +150,17 @@ public class EnemyController : MonoBehaviour, CharacterController
             return;
         }
 
-        // 3. Monkey → banan, inni → melee knockback
+        // 3. Pociski zależnie od typu wroga
         bool isMonkey = EnemyStats != null && EnemyStats.CharacterName == "Monkey";
+        bool isElephant = EnemyStats != null && EnemyStats.CharacterName == "Elephant";
 
         if (isMonkey)
         {
-            // Monkey: banan leci i sam zrobi knockback gracza po trafieniu
             FireBanana();
         }
-        else
+        else if (isElephant)
         {
-            // inni enemy: zwykły atak wręcz → od razu knockback gracza
-            if (TargetTransform != null)
-            {
-                HitHop hop = TargetTransform.GetComponent<HitHop>();
-                if (hop != null)
-                {
-                    // enemy jest po LEWEJ, gracz po PRAWEJ → knockback gracza w LEWO
-                    hop.Play(-1f);
-                }
-            }
+            FireBall();
         }
 
         // 4. Obrażenia
@@ -213,11 +206,31 @@ public class EnemyController : MonoBehaviour, CharacterController
         }
     }
 
+    private void FireBall()
+    {
+        if (ballPrefab == null || TargetTransform == null) return;
+
+        Vector3 startPos = ballSpawnPoint != null
+            ? ballSpawnPoint.position
+            : transform.position;
+
+        GameObject ball = Instantiate(ballPrefab, startPos, Quaternion.identity, transform);
+
+        BallProjectile proj = ball.GetComponent<BallProjectile>();
+        if (proj != null)
+        {
+            proj.Init(TargetTransform);
+        }
+        else
+        {
+            Debug.LogWarning("BallProjectile nie znaleziony na prefabie piłki.");
+        }
+    }
+
     private IEnumerator MoveRoutine(float currentDist)
     {
         BattleManager.Instance?.SetLastAction("Ruch do gracza (-STA)");
 
-        Debug.Log("\n[RUCH] ─────────────────────────────────────────────");
         Vector3 start = transform.position;
         Vector3 target = TargetTransform.position;
         Vector3 dir = (target - start).normalized;
@@ -236,7 +249,6 @@ public class EnemyController : MonoBehaviour, CharacterController
             transform.position = start + dir * travel;
         }
 
-        Debug.Log($" Nowa pozycja: ({transform.position.x:F2}, {transform.position.y:F2})");
         float newDist = Vector3.Distance(transform.position, TargetTransform.position);
         Debug.Log($" Nowy dystans: {newDist:F2}m");
     }

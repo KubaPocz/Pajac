@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, CharacterController
     public TMP_Text info;
 
     [Header("Weapon")]
-    public GameObject staffPrefab;          // PREFAB laski (z PlayerStaffProjectile)
+    public GameObject staffPrefab; // PREFAB laski (z PlayerStaffProjectile)
 
     private bool isMyTurn = false;
     private bool actionLocked = false;
@@ -176,10 +176,8 @@ public class PlayerController : MonoBehaviour, CharacterController
         }
 
         // --- OGRANICZENIE ZASIĘGU ATAKU ---
-        // np. gracz może atakować tylko jeśli jest bliżej niż attackRangeX jednostek po osi X
-        float attackRangeX = 200f; // DOSTOSUJ do swojego świata (na start daj tyle co minDistanceToEnemy lub trochę więcej)
+        float attackRangeX = 200f; // dostosuj do gry
         float distX = Mathf.Abs(currentEnemy.transform.position.x - transform.position.x);
-
         if (distX > attackRangeX)
         {
             Debug.Log($"Atak anulowany – za daleko. DystansX: {distX} > Zasięg: {attackRangeX}");
@@ -192,7 +190,22 @@ public class PlayerController : MonoBehaviour, CharacterController
         Debug.Log($"Gracz: Wykonuje {name} atak!");
         StartCoroutine(ShowInfo($"{name} attack"));
 
-        // jeśli używasz laski – zostaw swój kod tutaj (Instantiate staffPrefab itd.)
+        // ZAMACH LASKĄ – prefab jako dziecko gracza
+        if (staffPrefab != null)
+        {
+            GameObject staff = Instantiate(
+                staffPrefab,
+                transform.position,
+                Quaternion.identity,
+                transform
+            );
+
+            PlayerStaffProjectile proj = staff.GetComponent<PlayerStaffProjectile>();
+            if (proj != null)
+            {
+                proj.Init(transform);
+            }
+        }
 
         float hitChance = 80f + (PlayerStats.Precision - target.Precision);
         float hitRoll = Random.Range(0f, 100f);
@@ -229,9 +242,16 @@ public class PlayerController : MonoBehaviour, CharacterController
         Debug.Log($"... SUKCES! Przeciwnik otrzymuje {damage} obrażeń.");
         target.GetDamage(damage);
 
+        // KNOCKBACK PRZECIWNIKA
+        HitHop enemyHop = currentEnemy.GetComponent<HitHop>();
+        if (enemyHop != null)
+        {
+            // zał.: gracz po LEWEJ, przeciwnik odskakuje w PRAWO
+            enemyHop.Play(+1f);
+        }
+
         EndTurn();
     }
-
 
     private IEnumerator SmoothMove(Vector3 from, Vector3 to, float duration)
     {

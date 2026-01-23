@@ -1723,6 +1723,8 @@ MonoBehaviour:
   moveSpeed: 100
   bananaPrefab: {fileID: 3194018763330512420, guid: cfcd11ae3e6373b4f852824be67bb47d, type: 3}
   bananaSpawnPoint: {fileID: 958618261}
+  ballPrefab: {fileID: 2919700098000030751, guid: 394450e7a5ecaa24192387731edaf9db, type: 3}
+  ballSpawnPoint: {fileID: 958618261}
 --- !u!114 &958618265
 MonoBehaviour:
   m_ObjectHideFlags: 0
