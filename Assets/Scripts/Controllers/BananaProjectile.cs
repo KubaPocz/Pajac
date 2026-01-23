@@ -1,61 +1,95 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/// Banan:
-/// - leci z enemy do gracza,
-/// - zmniejsza się,
-/// - obraca się,
-/// - po dojściu do gracza odpala odrzut gracza i znika.
 public class BananaProjectile : MonoBehaviour
 {
-    public float travelTime = 0.5f;    // czas lotu do gracza
-    public float minScale = 0.3f;      // docelowy rozmiar
-    public float rotationSpeed = 360f; // stopnie na sekundę
+    [Header("Movement")]
+    public Transform target;             // gracz
+    public float speed = 12f;            // prędkość lotu
+    public float hitDistance = 0.5f;     // dystans trafienia
+    public float spinSpeed = 360f;       // obrót (stopnie/sek)
 
-    private Transform target;
+    [Header("Scale shrink")]
+    public float minScaleFactor = 0.4f;  // do jakiej skali zmniejsza się przy końcu
 
-    public void Init(Transform targetTransform)
+    [Header("Hit effect")]
+    public GameObject splashPrefab;      // prefab SPLASH (Canvas -> SPLASH -> SplashRoot -> Image + Animator)
+
+    private Vector3 startScale;
+    private float totalDistance;
+
+    public void Init(Transform t)
     {
-        target = targetTransform;
+        target = t;
+
+        // zapamiętujemy skalę początkową i całkowity dystans
+        startScale = transform.localScale;
+
         if (target != null)
-        {
-            StartCoroutine(Fly());
-        }
+            totalDistance = Vector3.Distance(transform.position, target.position);
         else
+            totalDistance = 0f;
+    }
+
+    private void Update()
+    {
+        if (target == null) return;
+
+        // ruch
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            target.position,
+            speed * Time.deltaTime
+        );
+
+        // obrót
+        transform.Rotate(0f, 0f, spinSpeed * Time.deltaTime);
+
+        // zmniejszanie skali w miarę zbliżania się
+        if (totalDistance > 0f)
         {
-            Destroy(gameObject);
+            float currentDist = Vector3.Distance(transform.position, target.position);
+            float t = Mathf.Clamp01(1f - (currentDist / totalDistance)); // 0 → start, 1 → przy celu
+
+            float scaleFactor = Mathf.Lerp(1f, minScaleFactor, t);
+            transform.localScale = startScale * scaleFactor;
+        }
+
+        // trafienie
+        if (Vector3.Distance(transform.position, target.position) <= hitDistance)
+        {
+            OnHit();
         }
     }
 
-    private IEnumerator Fly()
+    private void OnHit()
     {
-        Vector3 startPos = transform.position;
-        Vector3 endPos = target.position;
-
-        Vector3 startScale = transform.localScale;
-        Vector3 endScale = startScale * minScale;
-
-        float t = 0f;
-
-        while (t < 1f)
+        // 1. Splash jako dziecko gracza
+        if (splashPrefab != null && target != null)
         {
-            t += Time.deltaTime / travelTime;
-            float lerp = Mathf.Clamp01(t);
+            GameObject splash = Instantiate(
+                splashPrefab,
+                target.position,
+                Quaternion.identity,
+                target
+            );
 
-            transform.position = Vector3.Lerp(startPos, endPos, lerp);
-            transform.localScale = Vector3.Lerp(startScale, endScale, lerp);
-            transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+            Animator anim = splash.GetComponentInChildren<Animator>();
+            if (anim != null)
+                anim.Play(0, -1, 0f);
 
-            yield return null;
+            Destroy(splash, 0.5f); // dopasuj do długości BananaSplash.anim
         }
 
-        // Trafienie w gracza → odrzut gracza W LEWO (enemy jest po lewej)
-        HitHop hop = target.GetComponent<HitHop>();
-        if (hop != null)
+        // 2. Knockback gracza
+        if (target != null)
         {
-            hop.Play(-1f); // gracz w lewo
+            HitHop hop = target.GetComponent<HitHop>();
+            if (hop != null)
+                hop.Play(-1f);
         }
 
+        // 3. Zniszcz banana
         Destroy(gameObject);
     }
 }
