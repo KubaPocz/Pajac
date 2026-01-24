@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2919700098000030751
+--- !u!1 &8289819517621383600
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5994851248296166052}
-  - component: {fileID: 5644333674283190707}
-  - component: {fileID: 4461504283489026746}
-  - component: {fileID: 8290785396898587090}
+  - component: {fileID: 6492213451476919652}
+  - component: {fileID: 882291051383051919}
+  - component: {fileID: 9185538305631431842}
+  - component: {fileID: -8076812978215628689}
   m_Layer: 5
-  m_Name: Ball
+  m_Name: clownBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5994851248296166052
+--- !u!224 &6492213451476919652
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919700098000030751}
+  m_GameObject: {fileID: 8289819517621383600}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 48.04, y: 48.04, z: 48.04}
@@ -35,24 +35,24 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 879.5366, y: 125.11206}
-  m_SizeDelta: {x: 9.312, y: 8.086}
+  m_AnchoredPosition: {x: -830, y: 148}
+  m_SizeDelta: {x: 7.053, y: 6.29}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5644333674283190707
+--- !u!222 &882291051383051919
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919700098000030751}
+  m_GameObject: {fileID: 8289819517621383600}
   m_CullTransparentMesh: 1
---- !u!114 &4461504283489026746
+--- !u!114 &9185538305631431842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919700098000030751}
+  m_GameObject: {fileID: 8289819517621383600}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b06ef721b9710b64d873bb8505b1c1d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 894d14cf42252b64eb03146f1494dd8d, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76,21 +76,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8290785396898587090
+--- !u!114 &-8076812978215628689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919700098000030751}
+  m_GameObject: {fileID: 8289819517621383600}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d8f6d2c4166e77438971ab354eef1d4, type: 3}
+  m_Script: {fileID: 11500000, guid: bffe04de6207f8b4f9e8feb4c8a137b0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BallProjectile
+  m_EditorClassIdentifier: Assembly-CSharp::ClownBallProjectile
   target: {fileID: 0}
   speed: 250
   hitDistance: 0.5
   spinSpeed: 360
   minScaleFactor: 0.4
-  splashPrefab: {fileID: 8768009150346800183, guid: 72e5a9425f384cc48846db500832b6ac, type: 3}
+  splashPrefab: {fileID: 8768009150346800183, guid: ebdd5d264a2ec0f478318521abeb5a7d, type: 3}
