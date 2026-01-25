@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip movementSound;
     public AudioClip applauseSound;
     public AudioClip gameoverSound;
+    public AudioClip blockSound;
 
     // Add WindUpLoop sound
     public AudioClip windUpLoopSound;
@@ -85,6 +86,7 @@ public class AudioManager : MonoBehaviour
     public static void PlayMovementSound() => PlaySoundEffect(instance?.movementSound);
     public static void PlayApplauseSound() => PlaySoundEffect(instance?.applauseSound);
     public static void PlayGameOverSound() => PlaySoundEffect(instance?.gameoverSound);
+    public static void PlayBlockSound() => PlaySoundEffect(instance?.blockSound);
 
     // New method for WindUpLoop sound effect
     public static void PlayWindUpLoopSound(float volume = 1.0f)
@@ -191,9 +193,9 @@ public class AudioManager : MonoBehaviour
 
     // Convenience methods for specific music tracks
     public static void PlayMainMenuMusic() => PlayMusic(instance?.mainMenuMusic);
-    public static void PlayLevelMusic() => PlayMusic(instance?.battleMusic);
+    public static void PlayBattleMusic() => PlayMusic(instance?.battleMusic);
     public static void PlayBossMusic() => PlayMusic(instance?.bossMusic);
-    public static void PlayVictoryMusic() => PlayMusic(instance?.upgradeMusic);
+    public static void PlayUpgradeMusic() => PlayMusic(instance?.upgradeMusic);
 
   
 

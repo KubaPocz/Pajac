@@ -44,6 +44,9 @@ public class BattleManager : MonoBehaviour
         enemy = FindObjectOfType<EnemyController>();
         if (buttonsVisibility == null) buttonsVisibility = FindObjectOfType<ButtonsVisibility>();
 
+        if (GameManager.Instance.CurrentEnemy == 3) AudioManager.PlayBossMusic();
+        else AudioManager.PlayBattleMusic();
+
         Invoke(nameof(StartPlayerTurn), 0.25f);
         updateEnemySprite(GameManager.Instance.CurrentEnemy);
     }
@@ -197,6 +200,7 @@ public class BattleManager : MonoBehaviour
         if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.AttackLight();
+        AudioManager.PlayAttackSound();
     }
 
     public void NormalAttackButton()
@@ -204,6 +208,7 @@ public class BattleManager : MonoBehaviour
         if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.AttackMedium();
+        AudioManager.PlayAttackSound();
     }
 
     public void HardAttackButton()
@@ -211,6 +216,7 @@ public class BattleManager : MonoBehaviour
         if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.AttackStrong();
+        AudioManager.PlayAttackSound();
     }
 
     public void BlockButton()
@@ -218,6 +224,7 @@ public class BattleManager : MonoBehaviour
         if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.Block();
+        AudioManager.PlayBlockSound();
     }
 
     public void MoveButton()
@@ -232,6 +239,7 @@ public class BattleManager : MonoBehaviour
         if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.MoveLeft();
+        AudioManager.PlayMovementSound();
     }
 
     public void MoveRightButton()
@@ -239,6 +247,7 @@ public class BattleManager : MonoBehaviour
         //if (state != BattleState.PlayerTurn) return;
         buttonsVisibility?.HideAll();
         player.MoveRight();
+        AudioManager.PlayMovementSound();
     }
 
     private void RestartBattle()
@@ -249,6 +258,8 @@ public class BattleManager : MonoBehaviour
     private void EndBattle()
     {
         // zwiększamy indeks przeciwnika
+        AudioManager.StopMusic();
+        AudioManager.PlayApplauseSound();
         GameManager.Instance.CurrentEnemy++;
 
         int nextIndex = GameManager.Instance.CurrentEnemy;

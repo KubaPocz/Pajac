@@ -231,7 +231,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.06384277, y: -0.000030517578}
+  m_AnchoredPosition: {x: -0.06384277, y: -0.000061035156}
   m_SizeDelta: {x: 0.12775, y: 0.000061035}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &57265940
@@ -603,6 +603,18 @@ MonoBehaviour:
       - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
         m_MethodName: PlayUiClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: StopMusic
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1513,6 +1525,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: f44b63b6791dd5144a2a09a4c016177e, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: blockSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3f1af0966a3fa8641ab454b08f6a2313, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: attackSound
       value: 
       objectReference: {fileID: 8300000, guid: 8902189790c63534f8112b0aa8652f82, type: 3}
@@ -1529,6 +1545,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: upgradeMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: f6113bd5dbacd1b4892b3729846a5232, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: applauseSound
       value: 
       objectReference: {fileID: 8300000, guid: 3d61f9d13523e0a4dbf1e95b9431a2fa, type: 3}
@@ -1540,6 +1560,10 @@ PrefabInstance:
       propertyPath: mainMenuMusic
       value: 
       objectReference: {fileID: 8300000, guid: f44b63b6791dd5144a2a09a4c016177e, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: movementSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 167fb449b2effdb449b120a9ecbc849e, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: windUpLoopSound
       value: 
