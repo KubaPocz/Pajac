@@ -289,6 +289,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayUiClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &10356592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -934,6 +946,7 @@ GameObject:
   - component: {fileID: 314995236}
   - component: {fileID: 314995235}
   - component: {fileID: 314995237}
+  - component: {fileID: 314995238}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -1020,6 +1033,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &314995238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314995233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dba8fc6ac1b85344a91c298957d3617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DayCycleSoundManager
 --- !u!1 &325266123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,9 +1670,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7103047783889822591, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayPop
+        m_MethodName: PlayUiClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1780,6 +1805,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1119105661}
         m_TargetAssemblyTypeName: StatisticsMenuButtons, Assembly-CSharp
         m_MethodName: OnResetButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayUiClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2227,9 +2264,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7103047783889822591, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayPop
+        m_MethodName: PlayUiClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3508,7 +3545,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 88.1
+  m_fontSize: 87.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3857,9 +3894,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7103047783889822591, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayPop
+        m_MethodName: PlayUiClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5171,7 +5208,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlaySoundEffect
+        m_MethodName: PlayUiClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6276,9 +6313,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7103047783889822591, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      - m_Target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayPop
+        m_MethodName: PlayUiClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

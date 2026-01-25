@@ -32,4 +32,5 @@ public class DayCycleManager : MonoBehaviour
         BoardAnimator.SetTrigger("Show");
     }
 
+
 }

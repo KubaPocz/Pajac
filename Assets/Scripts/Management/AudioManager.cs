@@ -12,6 +12,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip applauseSound;
     public AudioClip gameoverSound;
 
+    // Add WindUpLoop sound
+    public AudioClip windUpLoopSound;
+
     // Music Tracks
     [Header("Music Tracks")]
     public AudioClip mainMenuMusic;
@@ -42,7 +45,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        PlayMainMenuMusic(); //for debug
+        PlayMainMenuMusic(); 
     }
 
     void Initialize()
@@ -83,6 +86,15 @@ public class AudioManager : MonoBehaviour
     public static void PlayApplauseSound() => PlaySoundEffect(instance?.applauseSound);
     public static void PlayGameOverSound() => PlaySoundEffect(instance?.gameoverSound);
 
+    // New method for WindUpLoop sound effect
+    public static void PlayWindUpLoopSound(float volume = 1.0f)
+    {
+        if (instance != null && instance.windUpLoopSound != null)
+        {
+            instance.sfxSource.PlayOneShot(instance.windUpLoopSound, volume);
+        }
+    }
+
     // === LOOPING SOUND METHODS ===
 
     // Start playing a looping sound
@@ -112,6 +124,30 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // === WIND UP LOOP SPECIFIC METHODS ===
+
+    // Start playing the wind-up loop as a persistent looping sound
+    public static void StartWindUpLoop(float volume = 1.0f)
+    {
+        if (instance != null && instance.windUpLoopSound != null)
+        {
+            PlayLoopingSound(instance.windUpLoopSound, volume);
+        }
+    }
+
+    // Stop the wind-up loop if it's currently playing
+    public static void StopWindUpLoop()
+    {
+        if (instance != null && instance.loopingSoundSource.isPlaying &&
+            instance.loopingSoundSource.clip == instance.windUpLoopSound)
+        {
+            instance.loopingSoundSource.Stop();
+        }
+    }
+
+
+
+   
 
     // === MUSIC METHODS ===
 
@@ -158,4 +194,16 @@ public class AudioManager : MonoBehaviour
     public static void PlayLevelMusic() => PlayMusic(instance?.battleMusic);
     public static void PlayBossMusic() => PlayMusic(instance?.bossMusic);
     public static void PlayVictoryMusic() => PlayMusic(instance?.upgradeMusic);
+
+  
+
+    void OnDestroy()
+    {
+        // Clean up - stop all sounds when AudioManager is destroyed
+        if (instance == this)
+        {
+            StopLoopingSound();
+            StopMusic();
+        }
+    }
 }

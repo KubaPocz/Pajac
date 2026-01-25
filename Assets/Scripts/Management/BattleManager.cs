@@ -42,8 +42,10 @@ public class BattleManager : MonoBehaviour
         enemy = FindObjectOfType<EnemyController>();
         if (buttonsVisibility == null) buttonsVisibility = FindObjectOfType<ButtonsVisibility>();
 
+        if (GameManager.Instance.CurrentEnemy == 3) AudioManager.play
+        else
 
-        Invoke(nameof(StartPlayerTurn), 0.25f);
+                    Invoke(nameof(StartPlayerTurn), 0.25f);
         updateEnemySprite(GameManager.Instance.CurrentEnemy);
     }
 

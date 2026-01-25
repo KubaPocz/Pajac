@@ -753,7 +753,7 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -1540,6 +1540,10 @@ PrefabInstance:
       propertyPath: mainMenuMusic
       value: 
       objectReference: {fileID: 8300000, guid: f44b63b6791dd5144a2a09a4c016177e, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: windUpLoopSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e15e98328264c034e85eeaaba0d7f936, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: curtainOpenSound
       value: 
