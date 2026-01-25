@@ -25,11 +25,13 @@ public class BattleManager : MonoBehaviour
         public float pHP, pSTA;
         public float eHP, eSTA;
     }
+
     private void updateEnemySprite(int id)
     {
         Debug.Log(id);
         enemyImage.sprite = enemySprites[id];
     }
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -42,10 +44,7 @@ public class BattleManager : MonoBehaviour
         enemy = FindObjectOfType<EnemyController>();
         if (buttonsVisibility == null) buttonsVisibility = FindObjectOfType<ButtonsVisibility>();
 
-        if (GameManager.Instance.CurrentEnemy == 3) AudioManager.play
-        else
-
-                    Invoke(nameof(StartPlayerTurn), 0.25f);
+        Invoke(nameof(StartPlayerTurn), 0.25f);
         updateEnemySprite(GameManager.Instance.CurrentEnemy);
     }
 
@@ -110,10 +109,18 @@ public class BattleManager : MonoBehaviour
             pBeforeHP: snapshot.pHP, pBeforeSTA: snapshot.pSTA,
             eBeforeHP: snapshot.eHP, eBeforeSTA: snapshot.eSTA
         );
+
         if (player.PlayerStats.CurrentHealth <= 0f)
-        { RestartBattle(); ; return; }
-        if(enemy.EnemyStats.CurrentHealth <= 0f)
-        { EndBattle();return; }
+        {
+            RestartBattle();
+            return;
+        }
+
+        if (enemy.EnemyStats.CurrentHealth <= 0f)
+        {
+            EndBattle();
+            return;
+        }
 
         StartEnemyTurn();
     }
@@ -233,13 +240,29 @@ public class BattleManager : MonoBehaviour
         buttonsVisibility?.HideAll();
         player.MoveRight();
     }
+
     private void RestartBattle()
     {
         CurtainManager.Instance.ChangeScene("Fight", "Fight", true);
     }
+
     private void EndBattle()
     {
+        // zwiększamy indeks przeciwnika
         GameManager.Instance.CurrentEnemy++;
+
+        int nextIndex = GameManager.Instance.CurrentEnemy;
+        int spritesCount = enemySprites != null ? enemySprites.Length : 0;
+
+        // jeśli NIE ma już sprite'a dla następnego przeciwnika → koniec gry / ending cutscene
+        if (nextIndex >= spritesCount)
+        {
+            Debug.Log("Brak kolejnego przeciwnika w enemySprites – przejście do EndingCutscene.");
+            CurtainManager.Instance.ChangeScene("EndingCutscene", "Fight", true);
+            return;
+        }
+
+        // w przeciwnym razie normalnie przechodzimy do statystyk i kolejnego enemy
         CurtainManager.Instance.ChangeScene("Statistics", "Fight", true);
     }
 }
