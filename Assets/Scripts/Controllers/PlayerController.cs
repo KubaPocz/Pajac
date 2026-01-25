@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, CharacterController
     public TMP_Text info;
 
     [Header("Weapon")]
-    public GameObject staffPrefab;          // PREFAB laski (z PlayerStaffProjectile)
+    public GameObject staffPrefab; // PREFAB laski (z PlayerStaffProjectile)
 
     private bool isMyTurn = false;
     private bool actionLocked = false;
@@ -175,13 +175,31 @@ public class PlayerController : MonoBehaviour, CharacterController
             return;
         }
 
+        // --- OGRANICZENIE ZASIĘGU ATAKU ---
+        float attackRangeX = 200f; // dostosuj do gry
+        float distX = Mathf.Abs(currentEnemy.transform.position.x - transform.position.x);
+        if (distX > attackRangeX)
+        {
+            Debug.Log($"Atak anulowany – za daleko. DystansX: {distX} > Zasięg: {attackRangeX}");
+            StartCoroutine(ShowInfo("Too far to attack"));
+            EndTurn();
+            return;
+        }
+        // -----------------------------------
+
         Debug.Log($"Gracz: Wykonuje {name} atak!");
         StartCoroutine(ShowInfo($"{name} attack"));
 
-        // LASKA – swing przy graczu: prefab jako dziecko playera
+        // ZAMACH LASKĄ – prefab jako dziecko gracza
         if (staffPrefab != null)
         {
-            GameObject staff = Instantiate(staffPrefab, transform.position, Quaternion.identity, transform);
+            GameObject staff = Instantiate(
+                staffPrefab,
+                transform.position,
+                Quaternion.identity,
+                transform
+            );
+
             PlayerStaffProjectile proj = staff.GetComponent<PlayerStaffProjectile>();
             if (proj != null)
             {
@@ -224,11 +242,12 @@ public class PlayerController : MonoBehaviour, CharacterController
         Debug.Log($"... SUKCES! Przeciwnik otrzymuje {damage} obrażeń.");
         target.GetDamage(damage);
 
-        // jeśli nadal używasz HitHop:
-        HitHop hop = currentEnemy.GetComponent<HitHop>();
-        if (hop != null)
+        // KNOCKBACK PRZECIWNIKA
+        HitHop enemyHop = currentEnemy.GetComponent<HitHop>();
+        if (enemyHop != null)
         {
-            hop.Play(+1f);
+            // zał.: gracz po LEWEJ, przeciwnik odskakuje w PRAWO
+            enemyHop.Play(+1f);
         }
 
         EndTurn();

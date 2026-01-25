@@ -11,11 +11,24 @@ public class EnemyController : MonoBehaviour, CharacterController
     public float attackRange = 2.0f;
     public float moveSpeed = 4.0f;
 
-    [Header("Banana projectile (tylko dla Monkey)")]
+    [Header("Projectiles")]
+    [Tooltip("Pocisk małpy (banan)")]
     public GameObject bananaPrefab;
     public Transform bananaSpawnPoint;
 
-    // === STATYSTYKI AI DO LOGOWANIA ===
+    [Tooltip("Pocisk słonia (piłka)")]
+    public GameObject ballPrefab;
+    public Transform ballSpawnPoint;
+
+    [Tooltip("Pocisk klauna")]
+    public GameObject clownBallPrefab;
+    public Transform clownBallSpawnPoint;
+
+    [Tooltip("Pocisk bossa")]
+    public GameObject bossProjectilePrefab;
+    public Transform bossProjectileSpawnPoint;
+
+    // Statystyki walki (logowanie)
     private int turnCount = 0;
     private int totalAttackAttempts = 0;
     private int totalHits = 0;
@@ -31,6 +44,7 @@ public class EnemyController : MonoBehaviour, CharacterController
 
     private void Start()
     {
+        // aktualny wróg z GameManagera
         EnemyStats = GameManager.Instance.Enemies[GameManager.Instance.CurrentEnemy];
         EnemyStats.Initialize();
 
@@ -96,14 +110,13 @@ public class EnemyController : MonoBehaviour, CharacterController
             if (EnemyStats.UseStamina(5))
             {
                 totalMovesAttempted++;
-                Debug.Log("\n[RUCH] 🏃 WRÓG RUSZA SIĘ DO PRZODU!");
+                Debug.Log("\n[RUCH] WRÓG RUSZA SIĘ DO PRZODU!");
                 Debug.Log($" Koszt: 5 STA | Pozostało: {EnemyStats.CurrentStamina}");
                 yield return StartCoroutine(MoveRoutine(dist));
             }
             else
             {
-                Debug.Log($"[RUCH] ❌ BRAK STAMINY NA RUCH!");
-                Debug.Log($" Wymagane: 5 | Dostępne: {EnemyStats.CurrentStamina}");
+                Debug.Log($"[RUCH] BRAK STAMINY NA RUCH! Wymagane: 5 | Dostępne: {EnemyStats.CurrentStamina}");
                 Debug.Log(" → AKCJA ZASTĘPCZA: SEN");
                 PerformSleep();
             }
@@ -131,6 +144,7 @@ public class EnemyController : MonoBehaviour, CharacterController
         if (!isHit)
         {
             totalMisses++;
+            Debug.Log($"[ATAK] WRÓG PUDŁUJE (szansa {hitChance}%, wylosowano {hitRoll})");
             return;
         }
 
@@ -144,30 +158,32 @@ public class EnemyController : MonoBehaviour, CharacterController
         if (isDodged)
         {
             totalDodgesAgainstPlayer++;
-            Debug.Log($"\n[STATYSTYKA] Udane uniki gracza w całej walce: {totalDodgesAgainstPlayer}");
+            Debug.Log($"[ATAK] GRACZ ZROBIŁ UNIK (szansa uniku {dodgeChance}%, wylosowano {dodgeRoll})");
+            Debug.Log($"[STATYSTYKA] Udane uniki gracza w całej walce: {totalDodgesAgainstPlayer}");
             return;
         }
 
-        // 3. Monkey → banan, inni → melee knockback
+        // 3. Wybór rodzaju pocisku na podstawie CharacterName
         bool isMonkey = EnemyStats != null && EnemyStats.CharacterName == "Monkey";
+        bool isElephant = EnemyStats != null && EnemyStats.CharacterName == "Elephant";
+        bool isClown = EnemyStats != null && EnemyStats.CharacterName == "Clown";
+        bool isBoss = EnemyStats != null && EnemyStats.CharacterName == "Boss";
 
         if (isMonkey)
         {
-            // Monkey: banan leci i sam zrobi knockback gracza po trafieniu
             FireBanana();
         }
-        else
+        else if (isElephant)
         {
-            // inni enemy: zwykły atak wręcz → od razu knockback gracza
-            if (TargetTransform != null)
-            {
-                HitHop hop = TargetTransform.GetComponent<HitHop>();
-                if (hop != null)
-                {
-                    // enemy jest po LEWEJ, gracz po PRAWEJ → knockback gracza w LEWO
-                    hop.Play(-1f);
-                }
-            }
+            FireBall();
+        }
+        else if (isClown)
+        {
+            FireClownBall();
+        }
+        else if (isBoss)
+        {
+            FireBossProjectile();
         }
 
         // 4. Obrażenia
@@ -182,6 +198,9 @@ public class EnemyController : MonoBehaviour, CharacterController
             float reductionAmount = baseDamage * (reductionPercent / 100f);
             finalDamage -= reductionAmount;
             totalBlocksByPlayer++;
+
+            Debug.Log($"[BLOK] Gracz BLOKUJE. Redukcja {reductionPercent}% (-{reductionAmount} dmg).");
+            Debug.Log($"[STATYSTYKA] Łączna liczba bloków gracza: {totalBlocksByPlayer}");
         }
         else
         {
@@ -190,7 +209,12 @@ public class EnemyController : MonoBehaviour, CharacterController
 
         TargetStats.GetDamage(finalDamage);
         totalDamageDealt += finalDamage;
+
+        Debug.Log($"[OBRAŻENIA] Wróg zadaje {finalDamage} dmg (bazowo {baseDamage}).");
+        Debug.Log($"[STATYSTYKA] Łączne obrażenia zadane przez wroga: {totalDamageDealt}");
     }
+
+    // --- POCISKI ---
 
     private void FireBanana()
     {
@@ -213,11 +237,80 @@ public class EnemyController : MonoBehaviour, CharacterController
         }
     }
 
+    private void FireBall()
+    {
+        if (ballPrefab == null || TargetTransform == null) return;
+
+        Vector3 startPos = ballSpawnPoint != null
+            ? ballSpawnPoint.position
+            : transform.position;
+
+        GameObject ball = Instantiate(ballPrefab, startPos, Quaternion.identity, transform);
+
+        BallProjectile proj = ball.GetComponent<BallProjectile>();
+        if (proj != null)
+        {
+            proj.Init(TargetTransform);
+        }
+        else
+        {
+            Debug.LogWarning("BallProjectile nie znaleziony na prefabie piłki.");
+        }
+    }
+
+    private void FireClownBall()
+    {
+        if (clownBallPrefab == null || TargetTransform == null) return;
+
+        Vector3 startPos = clownBallSpawnPoint != null
+            ? clownBallSpawnPoint.position
+            : transform.position;
+
+        GameObject ball = Instantiate(clownBallPrefab, startPos, Quaternion.identity, transform);
+
+        ClownBallProjectile proj = ball.GetComponent<ClownBallProjectile>();
+        if (proj != null)
+        {
+            proj.Init(TargetTransform);
+        }
+        else
+        {
+            Debug.LogWarning("ClownBallProjectile nie znaleziony na prefabie klauna.");
+        }
+    }
+
+    private void FireBossProjectile()
+    {
+        if (bossProjectilePrefab == null || TargetTransform == null) return;
+
+        Vector3 startPos = bossProjectileSpawnPoint != null
+            ? bossProjectileSpawnPoint.position
+            : transform.position;
+
+        GameObject projObj = Instantiate(
+            bossProjectilePrefab,
+            startPos,
+            Quaternion.identity,
+            transform
+        );
+
+        BossProjectile proj = projObj.GetComponent<BossProjectile>();
+        if (proj != null)
+        {
+            proj.Init(TargetTransform);
+        }
+        else
+        {
+            Debug.LogWarning("BossProjectile nie znaleziony na prefabie bossa.");
+        }
+    }
+
+    // --- RUCH / SEN / KONIEC TURY ---
+
     private IEnumerator MoveRoutine(float currentDist)
     {
         BattleManager.Instance?.SetLastAction("Ruch do gracza (-STA)");
 
-        Debug.Log("\n[RUCH] ─────────────────────────────────────────────");
         Vector3 start = transform.position;
         Vector3 target = TargetTransform.position;
         Vector3 dir = (target - start).normalized;
@@ -236,9 +329,8 @@ public class EnemyController : MonoBehaviour, CharacterController
             transform.position = start + dir * travel;
         }
 
-        Debug.Log($" Nowa pozycja: ({transform.position.x:F2}, {transform.position.y:F2})");
         float newDist = Vector3.Distance(transform.position, TargetTransform.position);
-        Debug.Log($" Nowy dystans: {newDist:F2}m");
+        Debug.Log($"[RUCH] Nowy dystans: {newDist:F2}");
     }
 
     private void PerformSleep()
@@ -246,6 +338,7 @@ public class EnemyController : MonoBehaviour, CharacterController
         BattleManager.Instance?.SetLastAction("Sen (+STA)");
         totalSleepTurns++;
         EnemyStats.RestoreStamina(40);
+        Debug.Log($"[SEN] Wróg regeneruje 40 STA. Łączna liczba tur snu: {totalSleepTurns}");
     }
 
     private void EndTurn()
