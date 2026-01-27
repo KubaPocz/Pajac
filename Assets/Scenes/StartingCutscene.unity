@@ -853,6 +853,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3480226800770064188, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
+      propertyPath: sceneToLoad
+      value: Statistics
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480226800770064188, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
+      propertyPath: currentScene
+      value: StartingCutscene
+      objectReference: {fileID: 0}
     - target: {fileID: 5362667169948141069, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
       propertyPath: m_Name
       value: CutsceneManager

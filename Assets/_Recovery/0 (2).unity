@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 630890588}
   - component: {fileID: 630890587}
   m_Layer: 5
-  m_Name: Button_Credits
+  m_Name: Button_ContinueGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -747,7 +747,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316823668}
         m_TargetAssemblyTypeName: MainMenuButtons, Assembly-CSharp
-        m_MethodName: Credits
+        m_MethodName: ContinueGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -864,9 +864,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Credits
-
-'
+  m_text: Continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 641acaf5af8478140878196e414343f6, type: 2}
   m_sharedMaterial: {fileID: -6898459000713504695, guid: 641acaf5af8478140878196e414343f6, type: 2}
@@ -945,6 +943,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141018343}
   m_CullTransparentMesh: 1
+--- !u!1 &1213705877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 183127056082437564, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+  m_PrefabInstance: {fileID: 8170991392444742782}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1213705879}
+  - component: {fileID: 1213705878}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1213705878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+  m_PrefabInstance: {fileID: 8170991392444742782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213705877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1cae6a5be090543a29785f90cfa8f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  attackSound: {fileID: 8300000, guid: 8902189790c63534f8112b0aa8652f82, type: 3}
+  uiClickSound: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
+  curtainOpenSound: {fileID: 8300000, guid: 87ab85d0c1b11a84cb8a64e6c4ec0a08, type: 3}
+  curtainCloseSound: {fileID: 8300000, guid: b5f72f2945c87b245ac2aaea8118a3b5, type: 3}
+  movementSound: {fileID: 8300000, guid: 167fb449b2effdb449b120a9ecbc849e, type: 3}
+  applauseSound: {fileID: 8300000, guid: 3d61f9d13523e0a4dbf1e95b9431a2fa, type: 3}
+  gameoverSound: {fileID: 8300000, guid: f1f91302016227e4e809b6b471e110e4, type: 3}
+  blockSound: {fileID: 8300000, guid: 3f1af0966a3fa8641ab454b08f6a2313, type: 3}
+  windUpLoopSound: {fileID: 8300000, guid: e15e98328264c034e85eeaaba0d7f936, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: f44b63b6791dd5144a2a09a4c016177e, type: 3}
+  battleMusic: {fileID: 8300000, guid: 3a6c42c1ea06c9a49821deb2b18defb8, type: 3}
+  bossMusic: {fileID: 8300000, guid: 9d06ae54dec1cf9448fc644d3f271e19, type: 3}
+  upgradeMusic: {fileID: 8300000, guid: f6113bd5dbacd1b4892b3729846a5232, type: 3}
+--- !u!4 &1213705879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 1060694697784137488, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+  m_PrefabInstance: {fileID: 8170991392444742782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213705877}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 324.0332, y: 194.87766, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1565850011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,17 +1598,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: masterVolume
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: uiClickSound
       value: 
       objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: upgradeMusic
       value: 
-      objectReference: {fileID: 8300000, guid: 3e9a8d8324851ea4db493b77c5d4d0f5, type: 3}
+      objectReference: {fileID: 8300000, guid: f6113bd5dbacd1b4892b3729846a5232, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: applauseSound
       value: 
@@ -1565,55 +1616,23 @@ PrefabInstance:
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: mainMenuMusic
       value: 
-      objectReference: {fileID: 8300000, guid: 06cd7290a066f0e4bbecfd29c6893b59, type: 3}
+      objectReference: {fileID: 8300000, guid: f44b63b6791dd5144a2a09a4c016177e, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: movementSound
       value: 
       objectReference: {fileID: 8300000, guid: 167fb449b2effdb449b120a9ecbc849e, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: bossMusicVolume
-      value: 0.514
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: windUpLoopSound
       value: 
       objectReference: {fileID: 8300000, guid: e15e98328264c034e85eeaaba0d7f936, type: 3}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: blockSoundVolume
-      value: 1.61
-      objectReference: {fileID: 0}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: curtainOpenSound
       value: 
       objectReference: {fileID: 8300000, guid: 87ab85d0c1b11a84cb8a64e6c4ec0a08, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: windUpLoopVolume
-      value: 0.785
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: battleMusicVolume
-      value: 0.619
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: curtainCloseSound
       value: 
       objectReference: {fileID: 8300000, guid: b5f72f2945c87b245ac2aaea8118a3b5, type: 3}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: uiClickSoundVolume
-      value: 0.63
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: upgradeMusicVolume
-      value: 0.221
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: mainMenuMusicVolume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
-      propertyPath: movementSoundVolume
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: musicClips.Array.size
       value: 1

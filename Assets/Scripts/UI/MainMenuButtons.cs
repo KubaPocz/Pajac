@@ -5,11 +5,11 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void NewGame()
     {
-        CurtainManager.Instance.ChangeScene("StartingCutscene", "MainMenu",true);
+        CurtainManager.Instance.ChangeScene("StartingCutscene", "MainMenu",false);
     }
-    public void ContinueGame()
+    public void Credits()
     {
-
+        SceneManager.LoadScene("Credits");
     }
     public void ExitGame()
     {

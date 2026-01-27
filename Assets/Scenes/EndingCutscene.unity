@@ -804,7 +804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd890594ab30bc041be7512c857e6a05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChangeSceneOnVideoEnd
-  nextSceneName: Statistics
+  nextSceneName: Credits
 --- !u!1001 &4443682840687429451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -852,6 +852,14 @@ PrefabInstance:
     - target: {fileID: 371800984799768311, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480226800770064188, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
+      propertyPath: sceneToLoad
+      value: Credits
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480226800770064188, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
+      propertyPath: currentScene
+      value: EndingCutscene
       objectReference: {fileID: 0}
     - target: {fileID: 5362667169948141069, guid: 5b525276198e60d4a8487c2fa67273f8, type: 3}
       propertyPath: m_Name

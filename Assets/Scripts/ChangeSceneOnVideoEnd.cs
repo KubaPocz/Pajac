@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(VideoPlayer))]
 public class ChangeSceneOnVideoEnd : MonoBehaviour
 {
-    public string nextSceneName = "Statistics"; // tu wpisz nazwę sceny
+    public string nextSceneName = "Statistics"; 
 
     private VideoPlayer videoPlayer;
 
@@ -17,6 +17,6 @@ public class ChangeSceneOnVideoEnd : MonoBehaviour
 
     void OnVideoFinished(VideoPlayer vp)
     {
-        CurtainManager.Instance.ChangeScene("Statistics", "StartingCutscene", true);
+        CurtainManager.Instance.ChangeScene("Credits", "EndingCutscene", false);
     }
 }
