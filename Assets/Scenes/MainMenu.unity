@@ -1541,13 +1541,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: masterVolume
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: uiClickSound
       value: 
       objectReference: {fileID: 8300000, guid: 46fbac3afec1ec24abf42a77b0bc9570, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: upgradeMusic
       value: 
-      objectReference: {fileID: 8300000, guid: 44d882b8643982844a4b98a91c86c8a8, type: 3}
+      objectReference: {fileID: 8300000, guid: 3e9a8d8324851ea4db493b77c5d4d0f5, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: applauseSound
       value: 
