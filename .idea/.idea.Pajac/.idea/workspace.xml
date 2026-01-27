@@ -6,15 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7022bc87-82b8-49f2-bb66-7095cce0c4d7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Pajac/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Pajac/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/MISFITS_ SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/MISFITS_ SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Images/Cutscenes/video2.renderTexture" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/Cutscenes/video2.renderTexture" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Managment/CutsceneManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Managment/CutsceneManager.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fonts/ARIBLK SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/ARIBLK SDF.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/EndingCutscene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/EndingCutscene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/StartingCutscene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/StartingCutscene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ChangeSceneOnVideoEnd.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ChangeSceneOnVideoEnd.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Management/CutsceneManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Management/CutsceneManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/MainMenuButtons.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/MainMenuButtons.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Management/BattleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Management/BattleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Management/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Management/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/StartBattleButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/StartBattleButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/StatisticsMenuButtons.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/StatisticsMenuButtons.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +50,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#18 on Sound-Effects-And-Music&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,

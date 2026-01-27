@@ -13,6 +13,8 @@ public class StartBattleButton : MonoBehaviour
 
     public void updateSprite(int id)
     {
-        buttonImage.sprite = FightButtons[id];
+        Debug.Log(id);
+        if(id<FightButtons.Length)
+            buttonImage.sprite = FightButtons[id];
     }
 }

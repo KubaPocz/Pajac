@@ -8,6 +8,7 @@ public class DayCycleManager : MonoBehaviour
     public Animator BoardAnimator;
     private void Start()
     {
+        AudioManager.PlayUpgradeMusic();
         StartCoroutine(SetDayWithDelay(3));
     }
     public void SetDay()
@@ -31,5 +32,6 @@ public class DayCycleManager : MonoBehaviour
     {
         BoardAnimator.SetTrigger("Show");
     }
+
 
 }
