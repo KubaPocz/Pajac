@@ -135,6 +135,17 @@ public class BattleManager : MonoBehaviour
             pBeforeHP: snapshot.pHP, pBeforeSTA: snapshot.pSTA,
             eBeforeHP: snapshot.eHP, eBeforeSTA: snapshot.eSTA
         );
+        if (player.PlayerStats.CurrentHealth <= 0f)
+        {
+            RestartBattle();
+            return;
+        }
+
+        if (enemy.EnemyStats.CurrentHealth <= 0f)
+        {
+            EndBattle();
+            return;
+        }
 
         StartPlayerTurn();
     }
@@ -248,16 +259,11 @@ public class BattleManager : MonoBehaviour
 
     private void EndBattle()
     {
-        // zwiększamy indeks przeciwnika
-        GameManager.Instance.CurrentEnemy++;
-
-        int nextIndex = GameManager.Instance.CurrentEnemy;
-        int spritesCount = enemySprites != null ? enemySprites.Length : 0;
-
-        // jeśli NIE ma już sprite'a dla następnego przeciwnika → koniec gry / ending cutscene
-        if (nextIndex >= spritesCount)
+        // zwiększamy indeks przeciwnika jeśli istnieje kolejny przeciwnik
+        if(GameManager.Instance.CurrentEnemy+1<=GameManager.Instance.Enemies.Length)
+            GameManager.Instance.CurrentEnemy++;
+        else
         {
-            Debug.Log("Brak kolejnego przeciwnika w enemySprites – przejście do EndingCutscene.");
             CurtainManager.Instance.ChangeScene("EndingCutscene", "Fight", true);
             return;
         }
