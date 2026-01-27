@@ -7,7 +7,7 @@ public class MainMenuButtons : MonoBehaviour
     {
         CurtainManager.Instance.ChangeScene("StartingCutscene", "MainMenu",true);
     }
-    public void ContinueGame()
+    public void Credits()
     {
 
     }
