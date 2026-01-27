@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class CutsceneManager : MonoBehaviour
 {
-    [SerializeField] private string targetSceneName;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -16,9 +15,11 @@ public class CutsceneManager : MonoBehaviour
 
     private void CutSceneEnd()
     {
-        if (!string.IsNullOrEmpty(targetSceneName))
+        if (GameManager.Instance.CurrentEnemy == 0)
         {
-            SceneManager.LoadScene(targetSceneName);
+            CurtainManager.Instance.ChangeScene("Statistics", "StartingCutscene", true);
         }
+        else
+            SceneManager.LoadScene("Credits");
     }
 }
