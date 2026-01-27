@@ -1547,7 +1547,7 @@ PrefabInstance:
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: upgradeMusic
       value: 
-      objectReference: {fileID: 8300000, guid: f6113bd5dbacd1b4892b3729846a5232, type: 3}
+      objectReference: {fileID: 8300000, guid: 44d882b8643982844a4b98a91c86c8a8, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: applauseSound
       value: 
@@ -1559,23 +1559,55 @@ PrefabInstance:
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: mainMenuMusic
       value: 
-      objectReference: {fileID: 8300000, guid: f44b63b6791dd5144a2a09a4c016177e, type: 3}
+      objectReference: {fileID: 8300000, guid: 06cd7290a066f0e4bbecfd29c6893b59, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: movementSound
       value: 
       objectReference: {fileID: 8300000, guid: 167fb449b2effdb449b120a9ecbc849e, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: bossMusicVolume
+      value: 0.514
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: windUpLoopSound
       value: 
       objectReference: {fileID: 8300000, guid: e15e98328264c034e85eeaaba0d7f936, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: blockSoundVolume
+      value: 1.61
+      objectReference: {fileID: 0}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: curtainOpenSound
       value: 
       objectReference: {fileID: 8300000, guid: 87ab85d0c1b11a84cb8a64e6c4ec0a08, type: 3}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: windUpLoopVolume
+      value: 0.785
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: battleMusicVolume
+      value: 0.619
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: curtainCloseSound
       value: 
       objectReference: {fileID: 8300000, guid: b5f72f2945c87b245ac2aaea8118a3b5, type: 3}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: uiClickSoundVolume
+      value: 0.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: upgradeMusicVolume
+      value: 0.221
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: mainMenuMusicVolume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
+      propertyPath: movementSoundVolume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: musicClips.Array.size
       value: 1
