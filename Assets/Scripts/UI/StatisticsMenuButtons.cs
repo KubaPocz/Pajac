@@ -25,9 +25,9 @@ public class StatisticsMenuButtons : MonoBehaviour
     }
     public void StartFight()
     {
-        CurtainManager.Instance.ChangeScene("Fight", "Statistics", false);
         StatsManager.Instance.ConfirmStatistics();
         startBattleButton.updateSprite(GameManager.Instance.CurrentEnemy);
+        CurtainManager.Instance.ChangeScene("Fight", "Statistics", false);
     }
 
     public void OnHealthButtonClicked()

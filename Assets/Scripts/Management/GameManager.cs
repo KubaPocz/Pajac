@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public CharacterStats Player;
 
     public CharacterStats[] Enemies;
-    public int CurrentEnemy = 0;
+    public int CurrentEnemy = 3;
 
     //public CharacterStats Monkey;
     //public CharacterStats Elephant;

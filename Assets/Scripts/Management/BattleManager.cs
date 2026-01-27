@@ -270,10 +270,8 @@ public class BattleManager : MonoBehaviour
         // zwiększamy indeks przeciwnika
         AudioManager.StopMusic();
         AudioManager.PlayApplauseSound();
-        GameManager.Instance.CurrentEnemy++;
-
         // zwiększamy indeks przeciwnika jeśli istnieje kolejny przeciwnik
-        if(GameManager.Instance.CurrentEnemy+1<=GameManager.Instance.Enemies.Length)
+        if(GameManager.Instance.CurrentEnemy!=3)
             GameManager.Instance.CurrentEnemy++;
         else
         {
