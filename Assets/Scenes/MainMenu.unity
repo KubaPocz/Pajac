@@ -1632,7 +1632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: mainMenuMusicVolume
-      value: 0.254
+      value: 0.376
       objectReference: {fileID: 0}
     - target: {fileID: 7098863497140105268, guid: 033683a60e11b1a4d8e08772d955ec53, type: 3}
       propertyPath: movementSoundVolume
