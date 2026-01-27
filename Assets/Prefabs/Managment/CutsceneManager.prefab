@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8caf9858cc6e24468157fbd8f29e6d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CutsceneManager
-  targetSceneName: Statistics
+  currentScene:
+    m_Handle: 0

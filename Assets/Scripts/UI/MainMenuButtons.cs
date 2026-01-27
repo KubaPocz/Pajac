@@ -9,7 +9,7 @@ public class MainMenuButtons : MonoBehaviour
     }
     public void Credits()
     {
-
+        SceneManager.LoadScene("Credits");
     }
     public void ExitGame()
     {
